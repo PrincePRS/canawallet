@@ -1,4 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cancoin_wallet/screens/wallet/wallet_collect.dart';
+import 'package:cancoin_wallet/screens/wallet/wallet_finance.dart';
 import 'package:cancoin_wallet/screens/wallet/wallet_tokens.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -77,7 +79,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 ],
               ),
               SizedBox(height: 20),
-              btnState == 0 ? WalletToken() : Container()
+              btnState == 0 ? WalletToken() : ( btnState == 1 ? WalletFinance() : WalletCollect())
             ],
           ),
         )
