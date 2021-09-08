@@ -85,5 +85,8 @@ const Map<String, String> en = {
   'market_cap': 'Market Cap',
   'volume': 'Volume',
   'circulate_supply': 'Circulating Supply',
-  'total_supply': 'Total Supply'
+  'total_supply': 'Total Supply',
+  'from': 'From',
+  'to': 'To',
+  'confirm': 'Confirm'
 };

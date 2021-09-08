@@ -85,5 +85,8 @@ const Map<String, String> ch = {
   'market_cap': '市值',
   'volume': '音量',
   'circulate_supply': '循环供应',
-  'total_supply': '总供应量'
+  'total_supply': '总供应量',
+  'from': '来自',
+  'to': '至',
+  'confirm': '确认'
 };

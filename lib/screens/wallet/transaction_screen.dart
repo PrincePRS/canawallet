@@ -6,6 +6,7 @@ import 'package:cancoin_wallet/constants/strings.dart';
 import 'package:cancoin_wallet/global.dart';
 import 'package:cancoin_wallet/provider/params_controller.dart';
 import 'package:cancoin_wallet/provider/token_provider.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -33,7 +34,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: Get.width * 0.01, vertical: Get.height * 0.06),
+        padding: EdgeInsets.symmetric(horizontal: Get.width * 0.05, vertical: Get.height * 0.07),
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/images/background.png"),
@@ -47,12 +48,13 @@ class _TransactionScreenState extends State<TransactionScreen> {
               children: [
                 Row(
                   children: [
-                    IconButton(
-                      onPressed: (){
+                    GestureDetector(
+                      onTap: (){
                         Get.back();
                       },
-                      icon: Icon(Icons.arrow_back, color: color.textColor, size: 30),
+                      child: Icon(LineIcons.arrowLeft, color: color.textColor, size: 30),
                     ),
+                    SizedBox(width: 15),
                     Text(context.watch<ParamsProvider>().transaction.isSent ? 'sent'.tr : 'received'.tr,
                       style: TextStyle(color: color.foreColor, fontFamily: Strings.fMedium, fontSize: 18)
                     ),
@@ -76,15 +78,15 @@ class _TransactionScreenState extends State<TransactionScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(context.watch<ParamsProvider>().transaction.isSent ? '- ' : '+ ', style: TextStyle(color: context.watch<ParamsProvider>().transaction.isSent ? color.foreColor : Colors.green, fontSize: 36, fontFamily: Strings.fSemiBold)),
+                        Text(context.watch<ParamsProvider>().transaction.isSent ? '- ' : '+ ', style: TextStyle(color: context.watch<ParamsProvider>().transaction.isSent ? color.warn : color.btnPrimaryColor, fontSize: 36, fontFamily: Strings.fSemiBold)),
                         Text(context.watch<ParamsProvider>().transaction.value.toString() + context.read<TokenProvider>().tokens[this.selToken].symbol.toUpperCase(),
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(color: context.watch<ParamsProvider>().transaction.isSent ? color.btnPrimaryColor : color.btnPrimaryColor, fontSize: 36, fontFamily: Strings.fSemiBold)
+                            style: TextStyle(color: context.watch<ParamsProvider>().transaction.isSent ? color.warn : color.btnPrimaryColor, fontSize: 36, fontFamily: Strings.fSemiBold)
                         ),
                       ],
                     ),
                     Container(
-                      margin: EdgeInsets.symmetric(vertical: Get.height * 0.03, horizontal: Get.width * 0.04),
+                      margin: EdgeInsets.symmetric(vertical: Get.height * 0.03),
                       padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(
@@ -113,7 +115,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                       )
                     ),
                     Container(
-                      margin: EdgeInsets.only(bottom: 30, left: Get.width * 0.04, right: Get.width * 0.04),
+                      margin: EdgeInsets.only(bottom: 30),
                       padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(
@@ -136,23 +138,20 @@ class _TransactionScreenState extends State<TransactionScreen> {
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: Get.width * 0.04),
-                      child: OutlinedButton(
-                        onPressed: () async{
-                          String url = Strings.txUrls[context.read<TokenProvider>().curNetwork] + context.read<ParamsProvider>().transaction.hash;
-                          await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
-                          // Share.share('check out my website https://example.com', subject: 'Look what I made!');
-                        },
-                        style: OutlinedButton.styleFrom(
-                          primary: Colors.white,
-                          side: BorderSide(color: color.btnPrimaryColor, width: 2),
-                          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0))),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(vertical: Get.height * 0.015),
-                          child: Text('more_detail'.tr, style: TextStyle(color: color.btnPrimaryColor, fontSize: 16, fontFamily: Strings.fSemiBold)),
-                        ),
+                    OutlinedButton(
+                      onPressed: () async{
+                        String url = Strings.txUrls[context.read<TokenProvider>().curNetwork] + context.read<ParamsProvider>().transaction.hash;
+                        await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
+                        // Share.share('check out my website https://example.com', subject: 'Look what I made!');
+                      },
+                      style: OutlinedButton.styleFrom(
+                        primary: Colors.white,
+                        side: BorderSide(color: color.btnPrimaryColor, width: 2),
+                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0))),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: Get.height * 0.015),
+                        child: Text('more_detail'.tr, style: TextStyle(color: color.btnPrimaryColor, fontSize: 16, fontFamily: Strings.fSemiBold)),
                       ),
                     ),
                   ],

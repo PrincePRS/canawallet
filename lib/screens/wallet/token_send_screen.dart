@@ -11,6 +11,7 @@ import 'package:cancoin_wallet/model/transaction_info.dart';
 import 'package:cancoin_wallet/provider/params_controller.dart';
 import 'package:cancoin_wallet/provider/token_provider.dart';
 import 'package:cancoin_wallet/screens/wallet/chart_screen.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 class SendTokenScreen extends StatefulWidget {
@@ -94,45 +95,49 @@ class _SendTokenScreenState extends State<SendTokenScreen> with TickerProviderSt
             ),
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        IconButton(
-                          onPressed: (){
-                            Get.back();
-                          },
-                          icon: Icon(Icons.arrow_back, color: color.textColor, size: 30),
-                        ),
-                        Text(context.read<TokenProvider>().tokens[this.selToken].name,
-                          style: TextStyle(color: color.foreColor, fontFamily: Strings.fMedium, fontSize: 18)
-                        ),
-                      ],
-                    ),
-                    IconButton(
-                      onPressed: (){
-                        AnimationController _animController = BottomSheet.createAnimationController(this);
-                        _animController.duration = Duration(milliseconds: 500);
-                        showModalBottomSheet(
-                          transitionAnimationController: _animController,
-                          isScrollControlled:true,
-                          enableDrag: false,
-                          isDismissible: false,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(40),
-                              topRight: Radius.circular(40),
-                            ),
+                Container(
+                  padding: EdgeInsets.only(left: Get.width * 0.05, right: Get.width * 0.05, bottom: Get.height * 0.02),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: (){
+                              Get.back();
+                            },
+                            child: Icon(LineIcons.arrowLeft, color: color.textColor, size: 30),
                           ),
-                          barrierColor: color.backColor.withOpacity(0.2),
-                          context: context,
-                          builder: (context) => ChartScreen()
-                        );
-                      },
-                      icon: FaIcon(FontAwesomeIcons.chartLine), color: color.textColor,
-                    ),
-                  ],
+                          SizedBox(width: 15),
+                          Text(context.read<TokenProvider>().tokens[this.selToken].name,
+                            style: TextStyle(color: color.foreColor, fontFamily: Strings.fMedium, fontSize: 18)
+                          ),
+                        ],
+                      ),
+                      IconButton(
+                        onPressed: (){
+                          AnimationController _animController = BottomSheet.createAnimationController(this);
+                          _animController.duration = Duration(milliseconds: 500);
+                          showModalBottomSheet(
+                            transitionAnimationController: _animController,
+                            isScrollControlled:true,
+                            enableDrag: false,
+                            isDismissible: false,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(40),
+                                topRight: Radius.circular(40),
+                              ),
+                            ),
+                            barrierColor: color.backColor.withOpacity(0.2),
+                            context: context,
+                            builder: (context) => ChartScreen()
+                          );
+                        },
+                        icon: FaIcon(FontAwesomeIcons.chartLine), color: color.textColor,
+                      ),
+                    ],
+                  ),
                 ),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(35.0),

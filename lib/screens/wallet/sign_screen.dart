@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'package:cancoin_wallet/component/common_button.dart';
+import 'package:cancoin_wallet/component/tx_components.dart';
+import 'package:cancoin_wallet/constants/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cancoin_wallet/global.dart';
 import 'package:cancoin_wallet/provider/params_controller.dart';
 import 'package:cancoin_wallet/provider/token_provider.dart';
 import 'package:cancoin_wallet/screens/dashboard_screen.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 class SignTransactionScreen extends StatefulWidget {
@@ -78,78 +82,110 @@ class _SignTransactionScreenState extends State<SignTransactionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Confirm'.tr),
-        backgroundColor: color.backColor,
-        elevation: 0,
-      ),
-      backgroundColor: color.borderColor,
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: Get.width * 0.1, vertical: Get.height * 0.05),
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: Get.width * 0.05, vertical: Get.height * 0.07),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/background.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Center(
-              child: Text(context.read<ParamsProvider>().amount + ' ' + context.read<TokenProvider>().tokens[this.selToken].symbol, style: TextStyle(color: color.foreColor, fontSize: 20, fontWeight: FontWeight.bold)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: (){
+                        Get.back();
+                      },
+                      child: Icon(LineIcons.arrowLeft, color: color.textColor, size: 30),
+                    ),
+                    SizedBox(width: 15),
+                    Text('confirm'.tr, style: TextStyle(color: color.foreColor, fontFamily: Strings.fMedium, fontSize: 18)
+                    ),
+                  ],
+                )
+              ],
             ),
-            Text('From', style: TextStyle(color: color.foreColor, fontSize: 18)),
-            Row(children: [
-              Text(this.walletName + '(', style: TextStyle(color: color.contrastTextColor)),
-              Expanded(child: Text(storageController.instance!.getString('accountAddress')!, overflow: TextOverflow.ellipsis, style: TextStyle(color: color.contrastTextColor))),
-              Text(')', style: TextStyle(color: color.contrastTextColor)),
-            ]),
-
-            Container(
-              margin: EdgeInsets.only(top: 10, bottom: 20),
-              height: 2,
-              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-              decoration: BoxDecoration(
-                color: color.btnSecondaryColor,
-                borderRadius: BorderRadius.all(Radius.circular(1))
+            SizedBox(height: Get.height * 0.02),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(context.read<ParamsProvider>().amount + ' ' + context.read<TokenProvider>().tokens[this.selToken].symbol.toUpperCase(),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(color: context.watch<ParamsProvider>().transaction.isSent ? color.btnPrimaryColor : color.btnPrimaryColor, fontSize: 30, fontFamily: Strings.fSemiBold)
+                        ),
+                      ],
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: Get.height * 0.03),
+                      padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(7)
+                        ),
+                        border: Border.all(color: color.borderColor, width: 2),
+                      ),
+                      child: Column(
+                        children: [
+                          TxItem(
+                            label: TxLabel(title: 'from'.tr),
+                            value: TxValue(title: storageController.instance!.getString('accountAddress')!)
+                          ),
+                          TxDivider(),
+                          TxItem(
+                            label: TxLabel(title: 'to'.tr),
+                            value: TxValue(title: context.read<ParamsProvider>().signedTx!.to.toString()),
+                            bottom: 0,
+                          ),
+                        ]
+                      )
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 30),
+                      padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(7),
+                        ),
+                        border: Border.all(color: color.borderColor, width: 2)
+                      ),
+                      child: Column(
+                        children: [
+                          TxItem(
+                            label: TxLabel(title: 'fee'.tr),
+                            value: TxValue(title: this.fee.toString() + ' ETH'),
+                            bottom: 0,
+                          ),
+                        ],
+                      ),
+                    ),
+                    this.isLoading ? Center(child: CircularProgressIndicator(color: color.foreColor)) : PrimaryButton(
+                      title: 'confirm'.tr,
+                      isActive: true,
+                      onPressed: () async{
+                        confirmTransaction();
+                      }
+                    )
+                  ],
+                ),
               )
-            ),
-
-            Text('To', style: TextStyle(color: color.foreColor, fontSize: 18)),
-            Text(context.read<ParamsProvider>().signedTx!.to.toString(), overflow: TextOverflow.ellipsis, style: TextStyle(color: color.contrastTextColor)),
-            Container(
-              margin: EdgeInsets.only(top: 10, bottom: 20),
-              height: 2,
-              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-              decoration: BoxDecoration(
-                color: color.btnSecondaryColor,
-                borderRadius: BorderRadius.all(Radius.circular(1))
-              )
-            ),
-
-            Text('Network Fee', style: TextStyle(color: color.foreColor, fontSize: 18)),
-            Text(this.fee.toString() + ' ETH', style: TextStyle(color: color.contrastTextColor)),
-            Container(
-              margin: EdgeInsets.only(top: 10, bottom: 40),
-              height: 2,
-              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-              decoration: BoxDecoration(
-                color: color.btnSecondaryColor,
-                borderRadius: BorderRadius.all(Radius.circular(1))
-              )
-            ),
-            this.isLoading ? Center(child: CircularProgressIndicator(color: color.foreColor)) : ElevatedButton(
-              child: Text('Confirm'.tr),
-              onPressed: () async{
-                confirmTransaction();
-              },
-              style: ElevatedButton.styleFrom(
-                onSurface: Colors.brown,
-                primary: color.foreColor,
-                padding: EdgeInsets.symmetric(vertical: 15),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-                textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
-              ),
             ),
           ],
         ),
       ),
     );
   }
+
+
   @override
   void dispose() {
     recipientController.dispose();
