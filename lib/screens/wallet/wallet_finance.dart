@@ -37,7 +37,7 @@ class _WalletFinanceState extends State<WalletFinance> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text('Coming Soon...', style: TextStyle(fontFamily: Strings.fBold, fontSize: 28, color: color.btnPrimaryColor)),
+            Text('coming_soon'.tr, style: TextStyle(fontFamily: Strings.fBold, fontSize: 28, color: color.btnPrimaryColor)),
             SizedBox(height: 10),
             Text('Lorem Ipsum Dolor Sir Amet', style: TextStyle(fontFamily: Strings.fSemiBold, fontSize: 14, color: color.foreColor)),
             Image.asset('assets/images/coming1.png')

@@ -67,7 +67,7 @@ class _SuccessWalletScreenState extends State<SuccessWalletScreen> {
                   primary: color.btnPrimaryColor,
                   padding: EdgeInsets.symmetric(vertical: 15),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-                  textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+                  textStyle: TextStyle(fontSize: 16, fontFamily: Strings.fSemiBold)
                 ),
               ),
             ),

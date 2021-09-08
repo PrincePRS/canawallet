@@ -73,5 +73,17 @@ const Map<String, String> ch = {
   'network': '网络',
   'sent': '发送',
   'received': '已收到',
-  'select_network': '选择网络'
+  'select_network': '选择网络',
+  'notify': '通知',
+  'coming_soon': '即将推出...',
+  'sender': '发件人',
+  'status': '状态',
+  'date': '日期',
+  'fee': '网络费用',
+  'nonce': '现时',
+  'more_detail': '更多细节',
+  'market_cap': '市值',
+  'volume': '音量',
+  'circulate_supply': '循环供应',
+  'total_supply': '总供应量'
 };

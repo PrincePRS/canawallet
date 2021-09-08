@@ -1,19 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cancoin_wallet/screens/wallet/wallet_collect.dart';
 import 'package:cancoin_wallet/screens/wallet/wallet_finance.dart';
 import 'package:cancoin_wallet/screens/wallet/wallet_tokens.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:cancoin_wallet/constants/chains.dart';
-import 'package:cancoin_wallet/constants/page_names.dart';
 import 'package:cancoin_wallet/constants/strings.dart';
 import 'package:cancoin_wallet/global.dart';
-import 'package:cancoin_wallet/provider/params_controller.dart';
-import 'package:cancoin_wallet/provider/token_provider.dart';
-import 'package:cancoin_wallet/screens/qrreader_screen.dart';
-import 'package:provider/provider.dart';
 
 
 class WalletScreen extends StatefulWidget {
@@ -69,7 +61,7 @@ class _WalletScreenState extends State<WalletScreen> {
                         },
                         style: ElevatedButton.styleFrom(
                           primary:  (index == this.btnState) ? color.btnPrimaryColor : color.backColor,
-                          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                          padding: EdgeInsets.symmetric( horizontal: 10),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                           elevation: 0
                         ),

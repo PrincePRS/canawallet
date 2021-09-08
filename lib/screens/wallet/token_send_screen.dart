@@ -1,4 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cancoin_wallet/component/common_button.dart';
+import 'package:cancoin_wallet/screens/wallet/wallet_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -80,52 +82,58 @@ class _SendTokenScreenState extends State<SendTokenScreen> with TickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(context.read<TokenProvider>().tokens[this.selToken].name) ,
-        backgroundColor: color.backColor,
-        actions: [
-          IconButton(
-            onPressed: (){
-              AnimationController _animController = BottomSheet.createAnimationController(this);
-              _animController.duration = Duration(milliseconds: 500);
-              showModalBottomSheet(
-                transitionAnimationController: _animController,
-                isScrollControlled:true,
-                enableDrag: false,
-                isDismissible: false,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(40),
-                    topRight: Radius.circular(40),
-                  ),
-                ),
-                barrierColor: color.backColor.withOpacity(0.2),
-                context: context,
-                builder: (context) => ChartScreen()
-              );
-            },
-            icon: FaIcon(FontAwesomeIcons.chartLine), color: color.white,
-          ),
-        ],
-        elevation: 0,
-      ),
-      backgroundColor: color.borderColor,
-      body: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.only(left: Get.width * 0.05, right: Get.width * 0.05, top: Get.height * 0.03, bottom: Get.height * 0.05),
-            width: Get.width,
+    return Obx((){
+      return Scaffold(
+        body: Container(
+            padding: EdgeInsets.only(top: Get.height * 0.07),
             decoration: BoxDecoration(
-              color: color.backColor,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(80),
-                bottomRight: Radius.circular(80)
-              )
+              image: DecorationImage(
+                image: AssetImage("assets/images/background.png"),
+                fit: BoxFit.cover,
+              ),
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: (){
+                            Get.back();
+                          },
+                          icon: Icon(Icons.arrow_back, color: color.textColor, size: 30),
+                        ),
+                        Text(context.read<TokenProvider>().tokens[this.selToken].name,
+                          style: TextStyle(color: color.foreColor, fontFamily: Strings.fMedium, fontSize: 18)
+                        ),
+                      ],
+                    ),
+                    IconButton(
+                      onPressed: (){
+                        AnimationController _animController = BottomSheet.createAnimationController(this);
+                        _animController.duration = Duration(milliseconds: 500);
+                        showModalBottomSheet(
+                          transitionAnimationController: _animController,
+                          isScrollControlled:true,
+                          enableDrag: false,
+                          isDismissible: false,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(40),
+                              topRight: Radius.circular(40),
+                            ),
+                          ),
+                          barrierColor: color.backColor.withOpacity(0.2),
+                          context: context,
+                          builder: (context) => ChartScreen()
+                        );
+                      },
+                      icon: FaIcon(FontAwesomeIcons.chartLine), color: color.textColor,
+                    ),
+                  ],
+                ),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(35.0),
                   child: CachedNetworkImage(
@@ -137,159 +145,136 @@ class _SendTokenScreenState extends State<SendTokenScreen> with TickerProviderSt
                     errorWidget: (context, url, error) => Image.asset('assets/images/coin.png')
                   )
                 ),
-                SizedBox(height: 15),
-                Text(context.watch<TokenProvider>().tokens[this.selToken].balance.toString() + ' ' + context.read<TokenProvider>().tokens[this.selToken].symbol.toUpperCase(), style: TextStyle(color: color.white, fontSize: 30, fontWeight: FontWeight.bold)),
+                SizedBox(height: 20),
+                Text(context.watch<TokenProvider>().tokens[this.selToken].balance.toString() + ' ' + context.read<TokenProvider>().tokens[this.selToken].symbol.toUpperCase(),
+                  style: TextStyle(color: color.btnPrimaryColor, fontSize: 28, fontFamily: Strings.fSemiBold)
+                ),
+                SizedBox(height: 10),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: Get.width * 0.05),
+                  height: 2,
+                  color: color.borderColor,
+                ),
                 SizedBox(height: 15),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Get.width * 0.15),
+                  padding: EdgeInsets.only(left: Get.width * 0.15, right: Get.width * 0.15, bottom: Get.height * 0.02),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        children: [
-                          ClipOval(
-                            child: Material(
-                              color: Color(0x44FFFFFF),
-                              child: InkWell(
-                                onTap: ()async{
-                                  context.read<ParamsProvider>().setAmount('');
-                                  context.read<ParamsProvider>().setAmount('');
-                                  Get.toNamed(PageNames.transferForm);
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(13),
-                                  child: Icon(Icons.file_upload, size: 20, color: Colors.white,),
-                                )
-                              )
-                            )
-                          ),
-                          SizedBox(height: 5),
-                          Text('send'.tr, style: TextStyle(color: color.white)),
-                        ],
+                      CircularButton(
+                        title: 'send'.tr,
+                        url: 'send-icon.png',
+                        onPressed: (){
+                          context.read<ParamsProvider>().setAmount('');
+                          Get.toNamed(PageNames.transferForm);
+                        }
                       ),
-                      Column(
-                        children: [
-                          ClipOval(
-                            child: Material(
-                              color: Color(0x44FFFFFF),
-                              child: InkWell(
-                                onTap: (){
-                                  Get.toNamed(PageNames.receive);
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(13),
-                                  child: Icon(Icons.download_sharp, size: 20, color: Colors.white,),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Text('receive'.tr, style: TextStyle(color: color.white, fontSize: 14)),
-                        ],
+                      CircularButton(
+                        title: 'receive'.tr,
+                        url: 'receive-icon.png',
+                        onPressed: (){
+                          Get.toNamed(PageNames.receive);
+                        }
                       ),
-                      Column(
-                        children: [
-                          ClipOval(
-                            child: Material(
-                              color: Color(0x44FFFFFF),
-                              child: InkWell(
-                                onTap: (){},
-                                child: Padding(
-                                  padding: const EdgeInsets.all(13),
-                                  child: Icon(FontAwesomeIcons.shoppingCart, size: 18, color: Colors.white,),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Text('buy'.tr, style: TextStyle(color: color.white, fontSize: 14)),
-                        ],
-                      )
-                    ]
-                  )
-                )
-              ]
-            )
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: Get.width * 0.05, vertical: Get.height * 0.03),
-                child: Column(
-                  children: List.generate(this.transactions.length, (index) => Padding(
-                    padding: EdgeInsets.symmetric(vertical: Get.height * 0.01),
-                    child: ElevatedButton(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              child: Row(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(9.0),
-                                    child: Icon(transactions[index].isSent ? Icons.upload_sharp : Icons.download_sharp, size: 26, color: color.contrastTextColor)
-                                  ),
-                                  SizedBox(width: 5),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                      CircularButton(
+                        title: 'buy'.tr,
+                        url: 'buy-icon.png',
+                        onPressed: (){}
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                    padding: EdgeInsets.only(left: Get.width * 0.05, right: Get.width * 0.05, top: 15),
+                    alignment: Alignment.centerLeft,
+                    color: color.contrastColor,
+                    child: Text('My Transactions', style: TextStyle(color: color.lightTextColor, fontFamily: Strings.fSemiBold, fontSize: 14))
+                ),
+                Expanded(
+                  child: context.watch<TokenProvider>().tokens.length == 0 ? Container(color: color.contrastColor, child: CircularProgressIndicator())
+                      : Container(
+                    color: color.contrastColor,
+                    child: ListView(
+                      padding: EdgeInsets.symmetric(horizontal: Get.width * 0.04, vertical: Get.height * 0.01),
+                      children: List.generate(this.transactions.length, (index){
+                        return Padding(
+                          padding: EdgeInsets.only(bottom: 15),
+                          child: ElevatedButton(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    child: Row(
                                       children: [
-                                        Text(this.transactions[index].date, overflow: TextOverflow.ellipsis, style: TextStyle(color: color.contrastTextColor, fontSize: 18)),
-                                        SizedBox(height: Get.height * 0.01,),
-                                        Row(
-                                          children: [
-                                            Text(transactions[index].isSent ?  'To: ' : 'From: ', overflow: TextOverflow.ellipsis, style: TextStyle(color: color.contrastTextColor, fontSize: 14)),
-                                            Expanded(
-                                              child: Container(
-                                                child: Text(this.transactions[index].receiver, overflow: TextOverflow.ellipsis, style: TextStyle(color: color.contrastTextColor, fontSize: 14))
-                                              ),
-                                            ),
-                                          ],
+                                        ClipRRect(
+                                            borderRadius: BorderRadius.circular(9.0),
+                                            child: Icon(transactions[index].isSent ? Icons.upload_sharp : Icons.download_sharp, size: 26, color: color.btnPrimaryColor)
                                         ),
+                                        SizedBox(width: 5),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(this.transactions[index].date, overflow: TextOverflow.ellipsis, style: TextStyle(color: color.contrastTextColor, fontSize: 16, fontFamily: Strings.fMedium)),
+                                              SizedBox(height: Get.height * 0.01,),
+                                              Row(
+                                                children: [
+                                                  Text(transactions[index].isSent ?  'To: ' : 'From: ', overflow: TextOverflow.ellipsis, style: TextStyle(color: color.contrastTextColor, fontSize: 12, fontFamily: Strings.fRegular)),
+                                                  Expanded(
+                                                    child: Container(
+                                                        child: Text(this.transactions[index].receiver, overflow: TextOverflow.ellipsis, style: TextStyle(color: color.contrastTextColor, fontSize: 14))
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        )
                                       ],
                                     ),
+                                  ),
+                                ),
+                                Container(
+                                  width: Get.width * 0.25,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(transactions[index].isSent ? '-' : '+', style: TextStyle(color: this.transactions[index].isSent ? color.foreColor : Colors.green, fontSize: 14, fontFamily: Strings.fSemiBold)),
+                                      Expanded(
+                                        child: Text(this.transactions[index].value.toString() + context.read<TokenProvider>().tokens[this.selToken].symbol.toUpperCase(),
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(color: this.transactions[index].isSent ? color.foreColor : Colors.green, fontSize: 18)
+                                        )
+                                      ),
+                                    ],
                                   )
-                                ],
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: Get.width * 0.25,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(transactions[index].isSent ? '-' : '+', style: TextStyle(color: this.transactions[index].isSent ? color.foreColor : Colors.green, fontSize: 18)),
-                                Expanded(
-                                  child: Text(this.transactions[index].value.toString() + context.read<TokenProvider>().tokens[this.selToken].symbol.toUpperCase(),
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(color: this.transactions[index].isSent ? color.foreColor : Colors.green, fontSize: 18))
                                 ),
                               ],
-                            )
-                          ),
-                        ],
-                      ),
-                      onPressed: () async {
-                        context.read<ParamsProvider>().setTransaction(this.transactions[index]);
-                        Get.toNamed(PageNames.txInfo);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        onSurface: Colors.brown,
-                        primary: color.btnSecondaryColor,
-                        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                        textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                        elevation: 5.0
-                      ),
+                            ),
+                            onPressed: () async {
+                              context.read<ParamsProvider>().setTransaction(this.transactions[index]);
+                              Get.toNamed(PageNames.txInfo);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              onSurface: Colors.brown,
+                              primary: color.btnSecondaryColor,
+                              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                              elevation: 5.0
+                            ),
+                          )
+                        );
+                      }),
                     ),
-                  ))
-                ),
-              ),
-            )
+                  )
+                )
+              ],
+            ),
           )
-        ]
-      )
-    );
+      );
+    });
   }
 }
+

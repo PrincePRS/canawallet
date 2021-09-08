@@ -73,5 +73,17 @@ const Map<String, String> en = {
   'network': 'Network',
   'sent': 'Sent',
   'received': 'Received',
-  'select_network': 'Select Network'
+  'select_network': 'Select Network',
+  'notify': 'Notifications',
+  'coming_soon': 'Coming Soon...',
+  'sender': 'Sender',
+  'status': 'Status',
+  'date': 'Date',
+  'fee': 'Network Fee',
+  'nonce': 'Nonce',
+  'more_detail': 'More Details',
+  'market_cap': 'Market Cap',
+  'volume': 'Volume',
+  'circulate_supply': 'Circulating Supply',
+  'total_supply': 'Total Supply'
 };

@@ -7,6 +7,8 @@ import 'package:cancoin_wallet/constants/strings.dart';
 import 'package:cancoin_wallet/global.dart';
 import 'package:cancoin_wallet/provider/params_controller.dart';
 import 'package:cancoin_wallet/provider/token_provider.dart';
+import 'package:line_icons/line_icon.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:provider/provider.dart';
 
@@ -102,127 +104,157 @@ class _TransferFormScreenState extends State<TransferFormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: Text( context.read<TokenProvider>().tokens[this.selToken].name),
-        backgroundColor: color.backColor,
-        elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () async {
-              String result = await Get.toNamed(PageNames.qrreader);
-              result = result.replaceAll('ethereum:', '');
-              if(!Strings.Address_Reg.hasMatch(result)){
-                Get.snackbar('invalid_address'.tr, result,
-                  colorText: color.foreColor,
-                  backgroundColor: color.btnSecondaryColor,
-                  isDismissible: true
-                );
-                return;
-              }
-              setState(() {
-                this.recipientController.text = result;
-              });
-            },
-            icon: Icon(Icons.qr_code_scanner))
-        ],
-      ),
       backgroundColor: color.borderColor,
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: Get.width * 0.1, vertical: Get.height * 0.05),
-        child: Form(
-          key: transferFormKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextFormField(
-                controller: recipientController,
-                cursorColor: color.foreColor,
-                style: TextStyle(color: color.contrastTextColor),
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: color.isDarkMode ? color.foreColor : color.backColor)
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: color.contrastTextColor)
-                  ),
-                  contentPadding: EdgeInsets.only(left: 15, bottom: 20, top: 20, right: 15),
-                  hintText: 'recipient_address'.tr,
-                  hintStyle: TextStyle(color: color.isDarkMode ? Color(0x55FFFFFF) : Color(0xFFB0B0B0)),
-                  suffixIcon: OutlinedButton(
-                    onPressed: (){
-                      FlutterClipboard.paste().then((result) async{
-                        setState(() {
-                          this.recipientController.text = result;
-                        });
-                      });
-                    },
-                    style: OutlinedButton.styleFrom(
-                      primary: Colors.white,
-                      side: BorderSide(color: Colors.transparent, width: 0),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0))),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 0),
-                      child: Text('paste'.tr, style: TextStyle(color: color.foreColor, fontSize: 14)),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: Get.height * 0.03),
-              TextFormField(
-                controller: amountController,
-                cursorColor: color.foreColor,
-                style: TextStyle(color: color.contrastTextColor),
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: color.isDarkMode ? color.foreColor : color.backColor)
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: color.contrastTextColor)
-                  ),
-                  contentPadding: EdgeInsets.only(left: 20, bottom: 20, top: 20, right: 20),
-                  hintText: 'amount'.tr,
-                  hintStyle: TextStyle(color: color.isDarkMode ? Color(0x55FFFFFF) : Color(0xFFB0B0B0)),
-                  suffixIcon: OutlinedButton(
-                    onPressed: (){
-                      setState(() {
-                        this.amountController.text = context.read<TokenProvider>().tokens[this.selToken].balance.toString();
-                      });
-                    },
-                    style: OutlinedButton.styleFrom(
-                      primary: Colors.white,
-                      side: BorderSide(color: Colors.transparent, width: 0),
-                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0))),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: Get.height * 0.015),
-                      child: Text('max'.tr, style: TextStyle(color: color.foreColor, fontSize: 14)),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: Get.height * 0.05),
-              this.isLoading ? Center(child: CircularProgressIndicator(color: color.foreColor)) : ElevatedButton(
-                child: Text('transfer'.tr),
-                onPressed: () async{
-                  transferToken();
-                },
-                style: ElevatedButton.styleFrom(
-                  onSurface: Colors.brown,
-                  primary: color.foreColor,
-                  padding: EdgeInsets.symmetric(vertical: 15),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-                  textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
-                ),
-              ),
-            ],
+      body: Container(
+        padding: EdgeInsets.only(top: Get.height * 0.07),
+        decoration: BoxDecoration(
+          color: color.white,
+          image: DecorationImage(
+            image: AssetImage("assets/images/background.png"),
+            fit: BoxFit.cover,
           ),
         ),
-      ),
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(left: Get.width * 0.05, right: Get.width * 0.05, bottom: Get.height * 0.03),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: (){
+                          Get.back();
+                        },
+                        child: Icon(LineIcons.arrowLeft, color: color.textColor, size: 30),
+                      ),
+                      SizedBox(width: 15),
+                      Text(context.read<TokenProvider>().tokens[this.selToken].name,
+                          style: TextStyle(color: color.foreColor, fontFamily: Strings.fMedium, fontSize: 18)
+                      )
+                    ],
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      String result = await Get.toNamed(PageNames.qrreader);
+                      result = result.replaceAll('ethereum:', '');
+                      if(!Strings.Address_Reg.hasMatch(result)){
+                        Get.snackbar('invalid_address'.tr, result,
+                          colorText: color.foreColor,
+                          backgroundColor: color.btnSecondaryColor,
+                          isDismissible: true
+                        );
+                        return;
+                      }
+                      setState(() {
+                        this.recipientController.text = result;
+                      });
+                    },
+                    child: Image.asset('assets/images/scan.png'),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: Get.width * 0.05),
+              child: Form(
+                key: transferFormKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    TextFormField(
+                      controller: recipientController,
+                      cursorColor: color.foreColor,
+                      style: TextStyle(color: color.contrastTextColor),
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: color.isDarkMode ? color.foreColor : color.backColor)
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: color.contrastTextColor)
+                        ),
+                        contentPadding: EdgeInsets.only(left: 15, bottom: 20, top: 20, right: 15),
+                        hintText: 'recipient_address'.tr,
+                        hintStyle: TextStyle(color: color.isDarkMode ? Color(0x55FFFFFF) : Color(0xFFB0B0B0)),
+                        suffixIcon: OutlinedButton(
+                          onPressed: (){
+                            FlutterClipboard.paste().then((result) async{
+                              setState(() {
+                                this.recipientController.text = result;
+                              });
+                            });
+                          },
+                          style: OutlinedButton.styleFrom(
+                            primary: Colors.white,
+                            side: BorderSide(color: Colors.transparent, width: 0),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0))),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 0),
+                            child: Text('paste'.tr, style: TextStyle(color: color.foreColor, fontSize: 14)),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: Get.height * 0.03),
+                    TextFormField(
+                      controller: amountController,
+                      cursorColor: color.foreColor,
+                      style: TextStyle(color: color.contrastTextColor, fontFamily: Strings.fRegular),
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: color.isDarkMode ? color.borderColor : color.borderColor)
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: color.borderColor)
+                        ),
+                        contentPadding: EdgeInsets.only(left: 20, bottom: 20, top: 20, right: 20),
+                        hintText: 'amount'.tr,
+                        hintStyle: TextStyle(color: color.isDarkMode ? color.lightTextColor : color.lightTextColor, fontFamily: Strings.fRegular),
+                        suffixIcon: OutlinedButton(
+                          onPressed: (){
+                            setState(() {
+                              this.amountController.text = context.read<TokenProvider>().tokens[this.selToken].balance.toString();
+                            });
+                          },
+                          style: OutlinedButton.styleFrom(
+                            primary: Colors.white,
+                            side: BorderSide(color: Colors.transparent, width: 0),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: Get.height * 0.015),
+                            child: Text('max'.tr, style: TextStyle(color: color.foreColor, fontSize: 14)),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: Get.height * 0.05),
+                    this.isLoading ? Center(child: CircularProgressIndicator(color: color.foreColor)) : ElevatedButton(
+                      child: Text('transfer'.tr),
+                      onPressed: () async{
+                        transferToken();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        onSurface: Colors.brown,
+                        primary: color.foreColor,
+                        padding: EdgeInsets.symmetric(vertical: 15),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+                        textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+                      )
+                    )
+                  ]
+                )
+              ),
+            )
+          ]
+        )
+      )
     );
   }
+
   @override
   void dispose() {
     recipientController.dispose();

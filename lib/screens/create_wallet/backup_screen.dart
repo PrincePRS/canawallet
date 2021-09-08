@@ -1,3 +1,4 @@
+import 'package:cancoin_wallet/constants/strings.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -41,31 +42,32 @@ class _BackupScreenState extends State<BackupScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-                margin: EdgeInsets.symmetric(horizontal: Get.width * 0.2, vertical: Get.height * 0.05),
-                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-                width: Get.width * 0.75 ,
-                decoration: BoxDecoration(
-                    color: color.btnSecondaryColor,
-                    borderRadius: BorderRadius.all(Radius.circular(10))
-                ),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: List.generate(2 , (index) => ElevatedButton(
-                      child:  Text(index == 0 ? 'phrases'.tr : 'privateKey'.tr, style: TextStyle(color: this.btnState == index ? color.white : color.backColor)),
-                      onPressed: () {
-                        setState(() {
-                          this.btnState = index;
-                          this.hintWords = [];
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary:  (index == this.btnState) ? color.backColor : color.btnSecondaryColor,
-                        padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                        elevation: 0
-                      ),
-                    ))
-                )
+              margin: EdgeInsets.symmetric(horizontal: Get.width * 0.2, vertical: Get.height * 0.05),
+              padding: EdgeInsets.symmetric(horizontal: 2, vertical: 0),
+              width: Get.width * 0.75 ,
+              decoration: BoxDecoration(
+                color: color.backColor,
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                border: Border.all(color: color.borderColor)
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: List.generate(2 , (index) => ElevatedButton(
+                  child:  Text(index == 0 ? 'phrases'.tr : 'privateKey'.tr, style: TextStyle(fontFamily: Strings.fSemiBold, fontSize: 14, color: (index == this.btnState) ? color.backColor : color.contrastTextColor)),
+                  onPressed: () {
+                    setState(() {
+                      this.btnState = index;
+                      this.hintWords = [];
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary:  (index == this.btnState) ? color.btnPrimaryColor : color.backColor,
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    elevation: 0
+                  ),
+                ))
+              )
             ),
             this.btnState == 0 ? Column(
               children: [
@@ -76,29 +78,33 @@ class _BackupScreenState extends State<BackupScreen> {
                       color: color.borderColor,
                       constraints: BoxConstraints(minHeight: Get.height * 0.2),
                       margin: EdgeInsets.only(bottom: Get.height * 0.02),
-                      padding: EdgeInsets.only(left: Get.width * 0.05, right: Get.width * 0.05, bottom: Get.height * 0.02, top: Get.height * 0.055),
+                      padding: EdgeInsets.only(left: Get.width * 0.00, right: Get.width * 0.00, bottom: Get.height * 0.02, top: Get.height * 0.055),
                       child: Wrap(
-                          alignment: WrapAlignment.center,
-                          children:  List.generate(this.orders.length, (index) => Padding(
-                            padding: EdgeInsets.only(right: 8),
-                            child: ElevatedButton(
-                              child:  Text(this.orders[index], style: TextStyle(color: color.white)),
-                              onPressed: () {
-                                setState(() {
-                                  this.hintWords.add(this.orders[index]);
-                                  this.orders.removeAt(index);
-                                  this.isCheck = false;
-                                  this._controller.text = '';
-                                  this.hintWords = [];
-                                });
-                              },
-                              style: ElevatedButton.styleFrom(
-                                primary: color.isDarkMode ? color.btnSecondaryColor : color.backColor,
-                                padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                              ),
+                        alignment: WrapAlignment.center,
+                        children:  List.generate(this.orders.length, (index) => Padding(
+                          padding: EdgeInsets.only(right: 8),
+                          child: ElevatedButton(
+                            child:  Padding(
+                              padding: EdgeInsets.symmetric(vertical: 3),
+                              child: Text(this.orders[index], style: TextStyle(color: color.contrastTextColor, fontSize: 14, fontFamily: Strings.fRegular)),
                             ),
-                          ))
+                            onPressed: () {
+                              setState(() {
+                                this.hintWords.add(this.orders[index]);
+                                this.orders.removeAt(index);
+                                this.isCheck = false;
+                                this._controller.text = '';
+                                this.hintWords = [];
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                              elevation: 0,
+                              primary: color.white,
+                              side: BorderSide(color: color.contrastTextColor, width: 2),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
+                            ),
+                          ),
+                        ))
                       ),
                     ),
                     Positioned(
@@ -134,7 +140,7 @@ class _BackupScreenState extends State<BackupScreen> {
                             style: ElevatedButton.styleFrom(
                               elevation: 0,
                               onSurface: color.isDarkMode ? Color(0xAA6E6FA4) : color.backColor,
-                              primary:   color.isDarkMode ? Color(0xAA6E6FA4) : color.backColor,
+                              primary:   color.isDarkMode ? color.btnPrimaryColor : color.btnPrimaryColor,
                               padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(0)),
@@ -170,7 +176,7 @@ class _BackupScreenState extends State<BackupScreen> {
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
                             onSurface: color.isDarkMode ? Color(0xAA6E6FA4) : color.backColor,
-                            primary:   color.isDarkMode ? Color(0xAA6E6FA4) : color.backColor,
+                            primary:   color.isDarkMode ? color.btnPrimaryColor : color.btnPrimaryColor,
                             padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(0)
@@ -182,12 +188,12 @@ class _BackupScreenState extends State<BackupScreen> {
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Get.width * 0.25),
+                  padding: EdgeInsets.symmetric(horizontal: Get.width * 0.07),
                   child: TextField(
                     controller: _controller,
                     cursorColor: color.foreColor,
                     keyboardType: TextInputType.text,
-                    style: TextStyle(color: color.contrastTextColor),
+                    style: TextStyle(color: color.contrastTextColor, fontFamily: Strings.fRegular),
                     textAlign: TextAlign.center,
                     enabled: !isCheck,
                     onChanged: (value){
@@ -196,20 +202,18 @@ class _BackupScreenState extends State<BackupScreen> {
                       });
                     },
                     decoration: InputDecoration(
+                      suffixIcon: Icon(Icons.arrow_forward, color: color.contrastTextColor),
                       border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(30),
+                        borderSide: BorderSide(color: Color(0xFF616161), width: 2)
+                        // borderRadius: BorderRadius.circular(30),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(30),
+                        borderSide: BorderSide(color: Color(0xFF616161), width: 2)
+                        // borderRadius: BorderRadius.circular(30),
                       ),
-                      filled: true,
-                      focusColor: color.isDarkMode ? Color(0xAA6E6FA4) : Color(0xAAFFFFFF),
-                      fillColor: color.isDarkMode ? Color(0xAA6E6FA4) : Color(0xAAFFFFFF),
-                      contentPadding: EdgeInsets.only(left: 15, bottom: 5, top: 5, right: 15),
+                      contentPadding: EdgeInsets.only(left: 15, bottom: 5, top: 5),
                       hintText: 'search_here'.tr,
-                      hintStyle: TextStyle(color: color.isDarkMode ? Color(0x55FFFFFF) : Color(0xFFB0B0B0))
+                      hintStyle: TextStyle(color: color.isDarkMode ? color.contrastTextColor : color.contrastTextColor, fontFamily: Strings.fRegular)
                     )
                   )
                 )
@@ -221,12 +225,12 @@ class _BackupScreenState extends State<BackupScreen> {
                   color: color.borderColor,
                   constraints: BoxConstraints(minHeight: Get.height * 0.2),
                   margin: EdgeInsets.only(bottom: Get.height * 0.02),
-                  padding: EdgeInsets.only(left: Get.width * 0.05, right: Get.width * 0.05, bottom: Get.height * 0.02, top: Get.height * 0.055),
+                  padding: EdgeInsets.only(left: Get.width * 0.00, right: Get.width * 0.00, bottom: Get.height * 0.02, top: Get.height * 0.055),
                   child: TextField(
                     controller: _privatekeyController,
                     cursorColor: color.foreColor,
                     keyboardType: TextInputType.text,
-                    style: TextStyle(color: color.contrastTextColor),
+                    style: TextStyle(color: color.contrastTextColor, fontFamily: Strings.fRegular),
                     minLines: 1,
                     maxLines: 4,
                     enabled: !isCheck,
@@ -242,7 +246,7 @@ class _BackupScreenState extends State<BackupScreen> {
                       ),
                       contentPadding: EdgeInsets.only(left: 15, bottom: 5, top: 5, right: 15),
                       hintText: 'privateKey'.tr,
-                      hintStyle: TextStyle(color: Color(0x55FFFFFF))
+                      hintStyle: TextStyle(color: Color(0x55FFFFFF), fontFamily: Strings.fRegular)
                     )
                   )
                 ),
@@ -269,8 +273,8 @@ class _BackupScreenState extends State<BackupScreen> {
                         },
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
-                          onSurface: color.isDarkMode ? Color(0xAA6E6FA4) : color.backColor,
-                          primary:   color.isDarkMode ? Color(0xAA6E6FA4) : color.backColor,
+                          onSurface: color.isDarkMode ? color.contrastTextColor : color.contrastTextColor,
+                          primary:   color.isDarkMode ? color.btnPrimaryColor : color.btnPrimaryColor,
                           padding:   EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
                           textStyle: TextStyle(
@@ -286,9 +290,9 @@ class _BackupScreenState extends State<BackupScreen> {
                             var isValid = await web3Controller.checkValidateMnemonics(result);
                             if(!isValid){
                               Get.snackbar('invalid_phrase'.tr, result,
-                                  colorText: color.foreColor,
-                                  backgroundColor: color.btnSecondaryColor,
-                                  isDismissible: true
+                                colorText: color.foreColor,
+                                backgroundColor: color.btnSecondaryColor,
+                                isDismissible: true
                               );
                               return;
                             }
@@ -306,15 +310,13 @@ class _BackupScreenState extends State<BackupScreen> {
                           });
                         },
                         style: ElevatedButton.styleFrom(
-                            elevation: 0,
-                            onSurface: color.isDarkMode ? Color(0xAA6E6FA4) : color.backColor,
-                            primary: color.isDarkMode ? Color(0xAA6E6FA4) : color.backColor,
-                            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0)),
-                            textStyle: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold)),
+                          elevation: 0,
+                          onSurface: color.isDarkMode ? Color(0xAA6E6FA4) : color.backColor,
+                          primary: color.isDarkMode ? color.btnPrimaryColor : color.btnPrimaryColor,
+                          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+                          textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+                        ),
                       ),
                     ]
                   )
@@ -330,8 +332,8 @@ class _BackupScreenState extends State<BackupScreen> {
                       alignment: WrapAlignment.center,
                       children: List.generate(this.hintWords.length, (index) => Padding(
                           padding: EdgeInsets.only(right: 8),
-                          child: ElevatedButton(
-                            child: Text(this.hintWords[index], style: TextStyle(color: color.contrastTextColor)),
+                          child: OutlinedButton(
+                            child: Text(this.hintWords[index], style: TextStyle(color: color.contrastTextColor, fontFamily: Strings.fRegular)),
                             onPressed: () {
                               setState(() {
                                 this._controller.text = '';
@@ -342,10 +344,10 @@ class _BackupScreenState extends State<BackupScreen> {
                                 }
                               });
                             },
-                            style: ElevatedButton.styleFrom(
-                              primary:  color.btnSecondaryColor,
-                              padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))
+                            style: OutlinedButton.styleFrom(
+                              primary: color.contrastTextColor,
+                              side: BorderSide(color: color.borderColor, width: 1),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
                             ),
                           ),
                         )
@@ -357,7 +359,7 @@ class _BackupScreenState extends State<BackupScreen> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: Get.width * 0.1),
+              padding: EdgeInsets.symmetric(horizontal: Get.width * 0.05),
               child: this.loading ? Center(child: CircularProgressIndicator(color: color.foreColor)) : ElevatedButton(
                 child: Text('backup'.tr),
                 onPressed: !this.isCheck && this.btnState == 0 ? null : () async {
@@ -391,11 +393,11 @@ class _BackupScreenState extends State<BackupScreen> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  onSurface: Colors.brown,
-                  primary: color.foreColor,
+                  onSurface: color.btnPrimaryColor,
+                  primary: color.btnPrimaryColor,
                   padding: EdgeInsets.symmetric(vertical: 15),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-                  textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+                  textStyle: TextStyle(fontSize: 15, fontFamily: Strings.fSemiBold)
                 ),
               ),
             ),

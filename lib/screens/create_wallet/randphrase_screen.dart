@@ -76,25 +76,26 @@ class _RandPhraseScreenState extends State<RandPhraseScreen> {
                     ),
                     SizedBox(height: Get.height * 0.03),
                     Container(
+                      padding: EdgeInsets.symmetric(horizontal: Get.width * 0.05),
                       child: Column(
                         children: [
                           Wrap(
-                              alignment: WrapAlignment.center,
-                              children:  List.generate(this.words.length, (index) => Padding(
-                                  padding: EdgeInsets.only(right: 8),
-                                  child: OutlinedButton(
-                                    onPressed: () async {},
-                                    style: OutlinedButton.styleFrom(
-                                      primary: color.contrastTextColor,
-                                      side: BorderSide(color: color.borderColor, width: 1),
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(vertical: 4),
-                                      child: Text((index + 1).toString() + ' ' + this.words[index], style: TextStyle(color: color.contrastTextColor, fontSize: 12, fontFamily: Strings.fRegular)),
-                                    ),
-                                  )
-                              ))
+                            alignment: WrapAlignment.center,
+                            children:  List.generate(this.words.length, (index) => Padding(
+                                padding: EdgeInsets.only(right: 8),
+                                child: OutlinedButton(
+                                  onPressed: () async {},
+                                  style: OutlinedButton.styleFrom(
+                                    primary: color.contrastTextColor,
+                                    side: BorderSide(color: color.borderColor, width: 1),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 4),
+                                    child: Text((index + 1).toString() + ' ' + this.words[index], style: TextStyle(color: color.contrastTextColor, fontSize: 12, fontFamily: Strings.fRegular)),
+                                  ),
+                                )
+                            ))
                           ),
                           SizedBox(height: Get.height * 0.02),
                           Row(

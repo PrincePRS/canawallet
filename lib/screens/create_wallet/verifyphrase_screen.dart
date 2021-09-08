@@ -155,42 +155,42 @@ class _VerifyPhraseScreenState extends State<VerifyPhraseScreen> {
                       child: Column(
                         children: [
                           Wrap(
-                              alignment: WrapAlignment.center,
-                              children:  List.generate(this.words.length, (index) => Padding(
-                                padding: EdgeInsets.only(right: 4),
-                                child: OutlinedButton(
-                                  onPressed: () async {
-                                    setState(() {
-                                      this.orders.add(this.words[index]);
-                                      this.words.removeAt(index);
-                                      var isValid = true;
-                                      for(int i = 0; i < this.orders.length; i ++){
-                                        if(this.orders[i] != this.patterns[i]){
-                                          Get.snackbar('warn'.tr, 'invalid_phrase_order'.tr,
-                                              colorText: color.foreColor,
-                                              backgroundColor: color.btnSecondaryColor,
-                                              isDismissible: true
-                                          );
-                                          break;
-                                        }
+                            alignment: WrapAlignment.center,
+                            children:  List.generate(this.words.length, (index) => Padding(
+                              padding: EdgeInsets.only(right: 4),
+                              child: OutlinedButton(
+                                onPressed: () async {
+                                  setState(() {
+                                    this.orders.add(this.words[index]);
+                                    this.words.removeAt(index);
+                                    var isValid = true;
+                                    for(int i = 0; i < this.orders.length; i ++){
+                                      if(this.orders[i] != this.patterns[i]){
+                                        Get.snackbar('warn'.tr, 'invalid_phrase_order'.tr,
+                                          colorText: color.foreColor,
+                                          backgroundColor: color.btnSecondaryColor,
+                                          isDismissible: true
+                                        );
+                                        break;
                                       }
-                                      if(this.words.length == 0 && isValid){
-                                        this.isCheck = true;
-                                      }
-                                    });
-                                  },
-                                  style: OutlinedButton.styleFrom(
-                                    primary: color.contrastTextColor,
-                                    side: BorderSide(color: color.borderColor, width: 1),
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 3),
-                                    child: Text(this.words[index], style: TextStyle(color: color.contrastTextColor, fontSize: 14, fontFamily: Strings.fRegular)),
-                                  ),
+                                    }
+                                    if(this.words.length == 0 && isValid){
+                                      this.isCheck = true;
+                                    }
+                                  });
+                                },
+                                style: OutlinedButton.styleFrom(
+                                  primary: color.contrastTextColor,
+                                  side: BorderSide(color: color.borderColor, width: 1),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
                                 ),
-                              )
-                              )
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 3),
+                                  child: Text(this.words[index], style: TextStyle(color: color.contrastTextColor, fontSize: 14, fontFamily: Strings.fRegular)),
+                                ),
+                              ),
+                            )
+                           )
                           ),
                         ],
                       ),

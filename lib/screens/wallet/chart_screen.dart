@@ -1,3 +1,5 @@
+import 'package:cancoin_wallet/component/tx_components.dart';
+import 'package:cancoin_wallet/constants/strings.dart';
 import 'package:coingecko_dart/dataClasses/coins/CoinDataPoint.dart';
 import 'package:coingecko_dart/dataClasses/coins/FullCoin.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -130,37 +132,32 @@ class _ChartScreenState extends State<ChartScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.only(left: Get.width * 0.01, right: Get.width * 0.01, top: Get.height * 0.06, bottom: Get.height * 0.02),
       decoration: BoxDecoration(
-        color: color.borderColor,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(24),
-          topRight: Radius.circular(24)
-        )
+        image: DecorationImage(
+          image: AssetImage("assets/images/background.png"),
+          fit: BoxFit.cover,
+        ),
       ),
-      height: Get.height * 0.95,
+      height: Get.height * 1,
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.only(bottom: Get.height * 0.02),
-            color: color.backColor,
-            child: Stack(
+            padding: EdgeInsets.only(bottom: 15),
+            child: Row(
               children: [
                 Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween ,
-                    children: [
-                      IconButton(
-                        onPressed: (){
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(Icons.arrow_back),
-                        color: color.white,
-                      )
-                    ]
-                ),
-                Container(
-                  padding: EdgeInsets.only(top: 10),
-                  alignment: Alignment.bottomCenter,
-                  child: Text(context.watch<TokenProvider>().tokens[this.selToken].name.toString() + '(' + context.watch<TokenProvider>().tokens[this.selToken].symbol.toUpperCase() + ')', style: TextStyle(fontSize: 20, color: color.white)),
+                  children: [
+                    IconButton(
+                      onPressed: (){
+                        Get.back();
+                      },
+                      icon: Icon(Icons.arrow_back, color: color.textColor, size: 30),
+                    ),
+                    Text(context.watch<ParamsProvider>().transaction.isSent ? 'sent'.tr : 'received'.tr,
+                        style: TextStyle(color: color.foreColor, fontFamily: Strings.fMedium, fontSize: 18)
+                    ),
+                  ],
                 )
               ],
             ),
@@ -170,36 +167,19 @@ class _ChartScreenState extends State<ChartScreen> {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: Get.width * 0.03, vertical: Get.height * 0.02),
                 child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10)
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: color.borderColor.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3)// changes position of shadow
-                      )
-                    ]
-                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Container(
                         padding: EdgeInsets.symmetric(vertical: 20),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(7),
-                          ),
-                          color: Color(0xff232d37)
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            border: Border.all(color: color.borderColor, width: 2),
+                          color: color.white
                         ),
                         child: Column(
                           children: [
-                            Center(child: Text('\$' + context.watch<TokenProvider>().tokens[this.selToken].price.toString(), style: TextStyle(color: color.white, fontSize: 30))),
+                            Center(child: Text('\$' + context.watch<TokenProvider>().tokens[this.selToken].price.toString(), style: TextStyle(color: color.btnPrimaryColor, fontSize: 26, fontFamily: Strings.fMedium))),
                             AspectRatio(
                               aspectRatio: 1.60,
                               child: Padding(
@@ -211,12 +191,7 @@ class _ChartScreenState extends State<ChartScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-                                  // width: Get.width * 0.7 ,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xff232d37),
-                                    borderRadius: BorderRadius.all(Radius.circular(10))
-                                  ),
+                                  padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: List.generate(btnNames.length , (index) => ElevatedButton(
@@ -228,8 +203,10 @@ class _ChartScreenState extends State<ChartScreen> {
                                         });
                                       },
                                       style: ElevatedButton.styleFrom(
-                                        primary:  (index == this.setId) ? (color.isDarkMode ? color.btnSecondaryColor : color.backColor) : Color(0xff232d37),
-                                        padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                                        primary:  (index == this.setId) ? (color.isDarkMode ? color.btnPrimaryColor : color.btnPrimaryColor) : color.white,
+                                        onPrimary: index == this.setId ? color.white : color.lightTextColor,
+                                        textStyle: TextStyle(fontFamily: Strings.fRegular, fontSize: 14),
+                                        padding: EdgeInsets.symmetric(vertical: 0, horizontal: 7),
                                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                                         elevation: 0
                                       ),
@@ -245,159 +222,35 @@ class _ChartScreenState extends State<ChartScreen> {
                         margin: EdgeInsets.symmetric(vertical: Get.height * 0.03),
                         padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(7),
-                          ),
-                          color: Color(0xff232d37)
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          border: Border.all(color: color.borderColor, width: 2),
+                          color: color.white
                         ),
                         child: Column(
                           children: [
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 20),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('Market Cap', style: TextStyle(color: color.foreColor, fontSize: 16, fontWeight: FontWeight.bold)),
-                                  Expanded(
-                                    child:  Text('\$' + double.parse(this.marketCap.toStringAsFixed(2)).toString(), textAlign: TextAlign.right, style: TextStyle(color: color.white, fontSize: 16)),
-                                  )
-                                ],
-                              ),
+                            TxItem(
+                                label: TxLabel(title: 'market_cap'.tr),
+                                value: TxValue(title: '\$' + double.parse(this.marketCap.toStringAsFixed(2)).toString())
                             ),
-                            Container(
-                                margin: EdgeInsets.only(bottom: 20),
-                                height: 1,
-                                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-                                decoration: BoxDecoration(
-                                  color: color.btnSecondaryColor,
-                                  borderRadius: BorderRadius.all(Radius.circular(1))
-                                )
+                            TxDivider(),
+                            TxItem(
+                                label: TxLabel(title: 'volume'.tr),
+                                value: TxValue(title: '\$' + double.parse(this.volume24.toStringAsFixed(2)).toString())
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 20),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('Volume', style: TextStyle(color: color.foreColor, fontSize: 16, fontWeight: FontWeight.bold)),
-                                  Expanded(
-                                    child:  Text('\$' + double.parse(this.volume24.toStringAsFixed(2)).toString(), textAlign: TextAlign.right, style: TextStyle(color: color.white, fontSize: 16)),
-                                  )
-                                ],
-                              ),
+                            TxDivider(),
+                            TxItem(
+                              label: TxLabel(title: 'circulate_supply'.tr),
+                              value: TxValue(title: double.parse(this.circularSupply.toStringAsFixed(2)).toString() + context.watch<TokenProvider>().tokens[this.selToken].symbol.toUpperCase())
                             ),
-                            Container(
-                                margin: EdgeInsets.only(bottom: 20),
-                                height: 1,
-                                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-                                decoration: BoxDecoration(
-                                  color: color.btnSecondaryColor,
-                                  borderRadius: BorderRadius.all(Radius.circular(1))
-                                )
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 20),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('Circulating Supply', style: TextStyle(color: color.foreColor, fontSize: 16, fontWeight: FontWeight.bold)),
-                                  Expanded(
-                                    child:  Text(double.parse(this.circularSupply.toStringAsFixed(2)).toString() + context.watch<TokenProvider>().tokens[this.selToken].symbol.toUpperCase(), overflow: TextOverflow.ellipsis, textAlign: TextAlign.right, style: TextStyle(color: color.white, fontSize: 16)),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Container(
-                                margin: EdgeInsets.only(bottom: 20),
-                                height: 1,
-                                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-                                decoration: BoxDecoration(
-                                  color: color.btnSecondaryColor,
-                                  borderRadius: BorderRadius.all(Radius.circular(1))
-                                )
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('Total Supply', style: TextStyle(color: color.foreColor, fontSize: 16, fontWeight: FontWeight.bold)),
-                                  Expanded(
-                                    child: Text(double.parse(this.totalSupply.toStringAsFixed(2)).toString() + context.watch<TokenProvider>().tokens[this.selToken].symbol.toUpperCase(), overflow: TextOverflow.ellipsis, textAlign: TextAlign.right, style: TextStyle(color: color.white, fontSize: 16)),
-                                  )
-                                ],
-                              ),
-                            ),
+                            TxDivider(),
+                            TxItem(
+                              bottom: 0,
+                              label: TxLabel(title: 'total_supply'.tr),
+                              value: TxValue(title: double.parse(this.totalSupply.toStringAsFixed(2)).toString() + context.watch<TokenProvider>().tokens[this.selToken].symbol.toUpperCase())
+                            )
                           ],
                         ),
-                      ),
-                      // Container(
-                      //   margin: EdgeInsets.only(bottom: Get.height * 0.03),
-                      //   padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-                      //   decoration: BoxDecoration(
-                      //     borderRadius: BorderRadius.all(
-                      //       Radius.circular(7),
-                      //     ),
-                      //     color: Color(0xff232d37)
-                      //   ),
-                      //   child: Column(
-                      //     children: [
-                      //       Padding(
-                      //         padding: EdgeInsets.only(bottom: 20),
-                      //         child: Row(
-                      //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //           children: [
-                      //             Text('Market Cap', style: TextStyle(color: color.foreColor, fontSize: 16, fontWeight: FontWeight.bold)),
-                      //             Expanded(
-                      //               child:  Text('\$' + double.parse(this.marketCap.toStringAsFixed(2)).toString(), textAlign: TextAlign.right, style: TextStyle(color: color.white, fontSize: 16)),
-                      //             )
-                      //           ],
-                      //         ),
-                      //       ),
-                      //       Container(
-                      //           margin: EdgeInsets.only(bottom: 20),
-                      //           height: 1,
-                      //           padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-                      //           decoration: BoxDecoration(
-                      //               color: color.btnSecondaryColor,
-                      //               borderRadius: BorderRadius.all(Radius.circular(1))
-                      //           )
-                      //       ),
-                      //       Padding(
-                      //         padding: EdgeInsets.only(bottom: 20),
-                      //         child: Row(
-                      //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //           children: [
-                      //             Text('Volume', style: TextStyle(color: color.foreColor, fontSize: 16, fontWeight: FontWeight.bold)),
-                      //             Expanded(
-                      //               child:  Text('\$' + double.parse(this.volume24.toStringAsFixed(2)).toString(), textAlign: TextAlign.right, style: TextStyle(color: color.white, fontSize: 16)),
-                      //             )
-                      //           ],
-                      //         ),
-                      //       ),
-                      //       Container(
-                      //           margin: EdgeInsets.only(bottom: 20),
-                      //           height: 1,
-                      //           padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-                      //           decoration: BoxDecoration(
-                      //               color: color.btnSecondaryColor,
-                      //               borderRadius: BorderRadius.all(Radius.circular(1))
-                      //           )
-                      //       ),
-                      //       Padding(
-                      //         padding: EdgeInsets.only(bottom: 20),
-                      //         child: Row(
-                      //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //           children: [
-                      //             Text('Circulating Supply', style: TextStyle(color: color.foreColor, fontSize: 16, fontWeight: FontWeight.bold)),
-                      //             Expanded(
-                      //               child:  Text(double.parse(this.circularSupply.toStringAsFixed(2)).toString() + context.read<TokenProvider>().tokens[this.selToken].symbol.toUpperCase(), overflow: TextOverflow.ellipsis, textAlign: TextAlign.right, style: TextStyle(color: color.white, fontSize: 16)),
-                      //             )
-                      //           ],
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
+                      )
                     ],
                   ),
                 ),
@@ -431,12 +284,11 @@ class _ChartScreenState extends State<ChartScreen> {
           dotData: FlDotData(
             show: false,
           )
-        ),
+        )
       ],
       lineTouchData: LineTouchData(
         enabled: true,
-        touchCallback: (dot){
-        }
+        touchCallback: (dot){}
       )
     );
   }

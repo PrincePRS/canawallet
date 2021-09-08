@@ -1,3 +1,4 @@
+import 'package:cancoin_wallet/component/tx_components.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -25,172 +26,138 @@ class _TransactionScreenState extends State<TransactionScreen> {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       this.selToken = context.read<ParamsProvider>().selTokenId;
-      // getTransactionInfo();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(context.watch<ParamsProvider>().transaction.isSent ? 'sent'.tr : 'received'.tr),
-        backgroundColor: color.backColor,
-        actions: [
-          IconButton(
-            onPressed: (){
-              String url = Strings.txUrls[context.read<TokenProvider>().curNetwork] + context.read<ParamsProvider>().transaction.hash;
-              Share.share(url, subject: 'urls');
-            },
-            icon: Icon(Icons.share)
-          )
-        ],
-        elevation: 0,
-      ),
-      backgroundColor: color.borderColor,
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: Get.width * 0.05, vertical: Get.height * 0.03),
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: Get.width * 0.01, vertical: Get.height * 0.06),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/background.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(context.watch<ParamsProvider>().transaction.isSent ? '- ' : '+ ', style: TextStyle(color: context.watch<ParamsProvider>().transaction.isSent ? color.foreColor : Colors.green, fontSize: 36)),
-                Text(context.watch<ParamsProvider>().transaction.value.toString() + context.read<TokenProvider>().tokens[this.selToken].symbol.toUpperCase(),
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: context.watch<ParamsProvider>().transaction.isSent ? color.foreColor : Colors.green, fontSize: 36)
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: (){
+                        Get.back();
+                      },
+                      icon: Icon(Icons.arrow_back, color: color.textColor, size: 30),
+                    ),
+                    Text(context.watch<ParamsProvider>().transaction.isSent ? 'sent'.tr : 'received'.tr,
+                      style: TextStyle(color: color.foreColor, fontFamily: Strings.fMedium, fontSize: 18)
+                    ),
+                  ],
+                ),
+                IconButton(
+                  onPressed: (){
+                    String url = Strings.txUrls[context.read<TokenProvider>().curNetwork] + context.read<ParamsProvider>().transaction.hash;
+                    Share.share(url, subject: 'urls');
+                  },
+                  icon: Icon(Icons.share), color: color.textColor,
                 ),
               ],
             ),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: Get.height * 0.03),
-              padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(7),
-                  ),
-                  color: Color(0xff232d37)
-              ),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            SizedBox(height: Get.height * 0.02),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Date', style: TextStyle(color: color.foreColor, fontSize: 16, fontWeight: FontWeight.bold)),
-                        Expanded(
-                          child:  Text(context.watch<ParamsProvider>().transaction.date, textAlign: TextAlign.right, style: TextStyle(color: color.white, fontSize: 16)),
-                        )
+                        Text(context.watch<ParamsProvider>().transaction.isSent ? '- ' : '+ ', style: TextStyle(color: context.watch<ParamsProvider>().transaction.isSent ? color.foreColor : Colors.green, fontSize: 36, fontFamily: Strings.fSemiBold)),
+                        Text(context.watch<ParamsProvider>().transaction.value.toString() + context.read<TokenProvider>().tokens[this.selToken].symbol.toUpperCase(),
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(color: context.watch<ParamsProvider>().transaction.isSent ? color.btnPrimaryColor : color.btnPrimaryColor, fontSize: 36, fontFamily: Strings.fSemiBold)
+                        ),
                       ],
                     ),
-                  ),
-                  Container(
-                      margin: EdgeInsets.only(bottom: 20),
-                      height: 1,
-                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: Get.height * 0.03, horizontal: Get.width * 0.04),
+                      padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
                       decoration: BoxDecoration(
-                          color: color.btnSecondaryColor,
-                          borderRadius: BorderRadius.all(Radius.circular(1))
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(7)
+                        ),
+                        border: Border.all(color: color.borderColor, width: 2),
+                      ),
+                      child: Column(
+                        children: [
+                          TxItem(
+                              label: TxLabel(title: 'date'.tr),
+                              value: TxValue(title: context.watch<ParamsProvider>().transaction.date)
+                          ),
+                          TxDivider(),
+                          TxItem(
+                            label: TxLabel(title: 'status'.tr),
+                            value: TxValue(title: 'Completed')
+                          ),
+                          TxDivider(),
+                          TxItem(
+                            bottom: 0,
+                            label: TxLabel(title: 'sender'.tr),
+                            value: TxValue(title: context.watch<ParamsProvider>().transaction.receiver)
+                          ),
+                        ]
                       )
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Status', style: TextStyle(color: color.foreColor, fontSize: 16, fontWeight: FontWeight.bold)),
-                        Expanded(
-                          child:  Text('Completed', textAlign: TextAlign.right, style: TextStyle(color: color.white, fontSize: 16)),
-                        )
-                      ],
                     ),
-                  ),
-                  Container(
-                      margin: EdgeInsets.only(bottom: 20),
-                      height: 1,
-                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 30, left: Get.width * 0.04, right: Get.width * 0.04),
+                      padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
                       decoration: BoxDecoration(
-                          color: color.btnSecondaryColor,
-                          borderRadius: BorderRadius.all(Radius.circular(1))
-                      )
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Sender', style: TextStyle(color: color.foreColor, fontSize: 16, fontWeight: FontWeight.bold)),
-                        Expanded(
-                          child:  Text(context.watch<ParamsProvider>().transaction.receiver, overflow: TextOverflow.ellipsis, textAlign: TextAlign.right, style: TextStyle(color: color.white, fontSize: 16)),
-                        )
-                      ],
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(7),
+                          ),
+                          border: Border.all(color: color.borderColor, width: 2)
+                      ),
+                      child: Column(
+                        children: [
+                          TxItem(
+                            label: TxLabel(title: 'fee'.tr),
+                            value: TxValue(title: context.watch<ParamsProvider>().transaction.fee.toString())
+                          ),
+                          TxDivider(),
+                          TxItem(
+                            bottom: 0,
+                            label: TxLabel(title: 'nonce'.tr),
+                            value: TxValue(title: context.watch<ParamsProvider>().transaction.nonce.toString())
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(bottom: 30),
-              padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(7),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: Get.width * 0.04),
+                      child: OutlinedButton(
+                        onPressed: () async{
+                          String url = Strings.txUrls[context.read<TokenProvider>().curNetwork] + context.read<ParamsProvider>().transaction.hash;
+                          await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
+                          // Share.share('check out my website https://example.com', subject: 'Look what I made!');
+                        },
+                        style: OutlinedButton.styleFrom(
+                          primary: Colors.white,
+                          side: BorderSide(color: color.btnPrimaryColor, width: 2),
+                          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0))),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: Get.height * 0.015),
+                          child: Text('more_detail'.tr, style: TextStyle(color: color.btnPrimaryColor, fontSize: 16, fontFamily: Strings.fSemiBold)),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                color: Color(0xff232d37)
-              ),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Network Fee', style: TextStyle(color: color.foreColor, fontSize: 16, fontWeight: FontWeight.bold)),
-                        Expanded(
-                          child:  Text(context.watch<ParamsProvider>().transaction.fee.toString(), textAlign: TextAlign.right, style: TextStyle(color: color.white, fontSize: 16)),
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(bottom: 20),
-                    height: 1,
-                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-                    decoration: BoxDecoration(
-                      color: color.btnSecondaryColor,
-                      borderRadius: BorderRadius.all(Radius.circular(1))
-                    )
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Nonce', style: TextStyle(color: color.foreColor, fontSize: 16, fontWeight: FontWeight.bold)),
-                        Expanded(
-                          child:  Text(context.watch<ParamsProvider>().transaction.nonce.toString(), textAlign: TextAlign.right, style: TextStyle(color: color.white, fontSize: 16)),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-            OutlinedButton(
-              onPressed: () async{
-                String url = Strings.txUrls[context.read<TokenProvider>().curNetwork] + context.read<ParamsProvider>().transaction.hash;
-                await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
-                // Share.share('check out my website https://example.com', subject: 'Look what I made!');
-              },
-              style: OutlinedButton.styleFrom(
-                primary: Colors.white,
-                side: BorderSide(color: color.borderColor, width: 0),
-                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0))),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: Get.height * 0.015),
-                child: Text("MORE DETAILS".tr, style: TextStyle(color: color.foreColor, fontSize: 18)),
-              ),
+              )
             ),
           ],
         ),
