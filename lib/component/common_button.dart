@@ -62,3 +62,29 @@ class PrimaryButton extends StatelessWidget {
     );
   }
 }
+
+class SuffixTextButton extends StatelessWidget {
+  final String title;
+  final Function() onPressed;
+  const SuffixTextButton({
+    Key? key,
+    required this.title,
+    required this.onPressed
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton(
+      onPressed: onPressed,
+      style: OutlinedButton.styleFrom(
+        primary: Colors.white,
+        side: BorderSide(color: Colors.transparent, width: 0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0))),
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 0),
+        child: Text(title, style: TextStyle(color: color.lightTextColor, fontSize: 14, fontFamily: Strings.fRegular)),
+      ),
+    );
+  }
+}

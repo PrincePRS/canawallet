@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:cancoin_wallet/component/common_button.dart';
+import 'package:cancoin_wallet/component/common_textfield.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -106,7 +108,7 @@ class _TransferFormScreenState extends State<TransferFormScreen> {
       resizeToAvoidBottomInset: false,
       backgroundColor: color.borderColor,
       body: Container(
-        padding: EdgeInsets.only(top: Get.height * 0.07),
+        padding: EdgeInsets.only(top: Get.height * 0.07, left: Get.width * 0.05, right: Get.width * 0.05),
         decoration: BoxDecoration(
           color: color.white,
           image: DecorationImage(
@@ -117,7 +119,7 @@ class _TransferFormScreenState extends State<TransferFormScreen> {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(left: Get.width * 0.05, right: Get.width * 0.05, bottom: Get.height * 0.03),
+              padding: EdgeInsets.only( bottom: Get.height * 0.05),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -157,93 +159,46 @@ class _TransferFormScreenState extends State<TransferFormScreen> {
               ),
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: Get.width * 0.05),
               child: Form(
                 key: transferFormKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    TextFormField(
+                    CustomTextField(
                       controller: recipientController,
-                      cursorColor: color.foreColor,
-                      style: TextStyle(color: color.contrastTextColor),
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: color.isDarkMode ? color.foreColor : color.backColor)
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: color.contrastTextColor)
-                        ),
-                        contentPadding: EdgeInsets.only(left: 15, bottom: 20, top: 20, right: 15),
-                        hintText: 'recipient_address'.tr,
-                        hintStyle: TextStyle(color: color.isDarkMode ? Color(0x55FFFFFF) : Color(0xFFB0B0B0)),
-                        suffixIcon: OutlinedButton(
-                          onPressed: (){
-                            FlutterClipboard.paste().then((result) async{
-                              setState(() {
-                                this.recipientController.text = result;
-                              });
+                      keyType: 1,
+                      hint: 'recipient_address'.tr,
+                      suffix: SuffixTextButton(
+                        title: 'paste'.tr,
+                        onPressed: (){
+                          FlutterClipboard.paste().then((result) async{
+                            setState(() {
+                              this.recipientController.text = result;
                             });
-                          },
-                          style: OutlinedButton.styleFrom(
-                            primary: Colors.white,
-                            side: BorderSide(color: Colors.transparent, width: 0),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0))),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 0),
-                            child: Text('paste'.tr, style: TextStyle(color: color.foreColor, fontSize: 14)),
-                          ),
-                        ),
+                          });
+                        },
                       ),
                     ),
                     SizedBox(height: Get.height * 0.03),
-                    TextFormField(
+                    CustomTextField(
                       controller: amountController,
-                      cursorColor: color.foreColor,
-                      style: TextStyle(color: color.contrastTextColor, fontFamily: Strings.fRegular),
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: color.isDarkMode ? color.borderColor : color.borderColor)
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: color.borderColor)
-                        ),
-                        contentPadding: EdgeInsets.only(left: 20, bottom: 20, top: 20, right: 20),
-                        hintText: 'amount'.tr,
-                        hintStyle: TextStyle(color: color.isDarkMode ? color.lightTextColor : color.lightTextColor, fontFamily: Strings.fRegular),
-                        suffixIcon: OutlinedButton(
-                          onPressed: (){
-                            setState(() {
-                              this.amountController.text = context.read<TokenProvider>().tokens[this.selToken].balance.toString();
-                            });
-                          },
-                          style: OutlinedButton.styleFrom(
-                            primary: Colors.white,
-                            side: BorderSide(color: Colors.transparent, width: 0),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: Get.height * 0.015),
-                            child: Text('max'.tr, style: TextStyle(color: color.foreColor, fontSize: 14)),
-                          ),
-                        ),
-                      ),
+                      hint: 'amount'.tr,
+                      suffix: SuffixTextButton(
+                        title: 'max'.tr,
+                        onPressed: (){
+                          setState(() {
+                            this.amountController.text = context.read<TokenProvider>().tokens[this.selToken].balance.toString();
+                          });
+                        },
+                      )
                     ),
                     SizedBox(height: Get.height * 0.05),
-                    this.isLoading ? Center(child: CircularProgressIndicator(color: color.foreColor)) : ElevatedButton(
-                      child: Text('transfer'.tr),
+                    this.isLoading ? Center(child: CircularProgressIndicator(color: color.foreColor)) : PrimaryButton(
+                      title: 'transfer'.tr,
+                      isActive: true,
                       onPressed: () async{
                         transferToken();
                       },
-                      style: ElevatedButton.styleFrom(
-                        onSurface: Colors.brown,
-                        primary: color.foreColor,
-                        padding: EdgeInsets.symmetric(vertical: 15),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-                        textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
-                      )
                     )
                   ]
                 )

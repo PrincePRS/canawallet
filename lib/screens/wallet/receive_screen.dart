@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:cancoin_wallet/component/common_button.dart';
+import 'package:cancoin_wallet/component/common_textfield.dart';
 import 'package:cancoin_wallet/constants/page_names.dart';
 import 'package:cancoin_wallet/constants/strings.dart';
 import 'package:clipboard/clipboard.dart';
@@ -74,22 +75,9 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
           children: [
             Text('set_amount'.tr, style: TextStyle(color: color.foreColor, fontFamily: Strings.fSemiBold, fontSize: 20)),
             SizedBox(height: 10),
-            TextFormField(
-              controller: _controller,
-              cursorColor: color.foreColor,
-              style: TextStyle(color: color.contrastTextColor, fontFamily: Strings.fMedium),
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: color.isDarkMode ? color.borderColor : color.borderColor)
-                ),
-                enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: color.borderColor)
-                ),
-                contentPadding: EdgeInsets.only(left: 20, bottom: 20, top: 20, right: 20),
-                hintText: '0.0',
-                hintStyle: TextStyle(color: color.isDarkMode ? color.lightTextColor : color.lightTextColor, fontFamily: Strings.fRegular),
-              ),
+            CustomTextField(
+                controller: _controller,
+                hint: '0.0'
             ),
             SizedBox(height: 20),
             Row(
@@ -153,7 +141,7 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
-        padding: EdgeInsets.only(top: Get.height * 0.06),
+        padding: EdgeInsets.only(top: Get.height * 0.07),
         decoration: BoxDecoration(
           color: color.white,
           image: DecorationImage(
@@ -165,7 +153,7 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              padding: EdgeInsets.symmetric(horizontal: Get.width * 0.01),
+              padding: EdgeInsets.only(left: Get.width * 0.05, right: Get.width * 0.05, bottom: Get.height * 0.02),
               child: Row(
                 children: [
                   GestureDetector(
@@ -174,6 +162,7 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
                     },
                     child: Icon(LineIcons.arrowLeft, color: color.textColor, size: 30),
                   ),
+                  SizedBox(width: 15),
                   Text('receive'.tr + ' ' + context.read<TokenProvider>().tokens[this.selToken].name,
                     style: TextStyle(color: color.foreColor, fontFamily: Strings.fMedium, fontSize: 18)
                   )
