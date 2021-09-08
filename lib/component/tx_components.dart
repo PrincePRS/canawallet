@@ -1,6 +1,7 @@
 import 'package:cancoin_wallet/constants/strings.dart';
 import 'package:cancoin_wallet/global.dart';
 import 'package:flutter/material.dart';
+
 class TxDivider extends StatelessWidget {
   const TxDivider({
     Key? key,

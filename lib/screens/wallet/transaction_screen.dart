@@ -89,9 +89,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                       margin: EdgeInsets.symmetric(vertical: Get.height * 0.03),
                       padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(7)
-                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(7)),
                         border: Border.all(color: color.borderColor, width: 2),
                       ),
                       child: Column(

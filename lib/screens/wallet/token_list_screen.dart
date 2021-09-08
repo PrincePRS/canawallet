@@ -1,4 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cancoin_wallet/component/common_button.dart';
+import 'package:cancoin_wallet/component/common_textfield.dart';
+import 'package:cancoin_wallet/component/setting_components.dart';
+import 'package:cancoin_wallet/constants/page_names.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:coingecko_dart/coingecko_dart.dart';
 import 'package:coingecko_dart/dataClasses/contracts/ContractToken.dart';
@@ -12,6 +16,7 @@ import 'package:cancoin_wallet/model/token_info.dart';
 import 'package:cancoin_wallet/provider/params_controller.dart';
 import 'package:cancoin_wallet/provider/token_provider.dart';
 import 'package:cancoin_wallet/screens/qrreader_screen.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 class TokenListScreen extends StatefulWidget {
@@ -107,426 +112,317 @@ class _TokenListScreenState extends State<TokenListScreen> with TickerProviderSt
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: color.borderColor,
-      appBar: AppBar(
-        title: TextField(
-          controller: _controller,
-          cursorColor: color.foreColor,
-          keyboardType: TextInputType.text,
-          style: TextStyle(color: color.white),
-          textAlign: TextAlign.left,
-          onChanged: (value){
-            this.tokens = [];
-            for(var i = 0; i < context.read<TokenProvider>().allTokens.length; i ++){
-              setState(() {
-                if(value == '' || context.read<TokenProvider>().allTokens[i].symbol.toLowerCase().contains(value.toLowerCase()))
-                  this.tokens.add(context.read<TokenProvider>().allTokens[i]);
-              });
-            }
-          },
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderSide: BorderSide.none,
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide.none,
-            ),
-            contentPadding: EdgeInsets.only(bottom: 5, top: 5, right: 15),
-            hintText: 'search_tokens'.tr,
-            hintStyle: TextStyle(color : Color(0x55FFFFFF))
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: Get.width * 0.05, vertical: Get.height * 0.07),
+        decoration: BoxDecoration(
+          color: color.white,
+          image: DecorationImage(
+            image: AssetImage("assets/images/background.png"),
+            fit: BoxFit.cover,
           ),
         ),
-        backgroundColor: color.backColor,
-        elevation: 0,
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: Get.width * 0.05),
-            child: IconButton(
-              onPressed: (){
-                Size sz = Get.size;
-                this.initFields();
-                this.setInitData();
-                AnimationController _animController = BottomSheet.createAnimationController(this);
-                _animController.duration = Duration(milliseconds: 800);
-                showModalBottomSheet(
-                  transitionAnimationController: _animController,
-                  isScrollControlled:true,
-                  enableDrag: false,
-                  isDismissible: false,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(40),
-                      topRight: Radius.circular(40),
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(bottom: Get.height * 0.03),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: (){
+                      Get.back();
+                    },
+                    child: Icon(LineIcons.arrowLeft, color: color.textColor, size: 30),
+                  ),
+                  SizedBox(width: 15),
+                  Expanded(
+                    child: CustomTextField(
+                      controller: _controller,
+                      hint: 'search_tokens'.tr,
+                      onChange: (value){
+                        this.tokens = [];
+                        for(var i = 0; i < context.read<TokenProvider>().allTokens.length; i ++){
+                          setState(() {
+                            if(value == '' || context.read<TokenProvider>().allTokens[i].symbol.toLowerCase().contains(value.toLowerCase()))
+                              this.tokens.add(context.read<TokenProvider>().allTokens[i]);
+                          });
+                        }
+                      },
                     ),
                   ),
-                  barrierColor: color.backColor.withOpacity(0.2),
-                  context: context,
-                  builder: (context) => Container(
-                    decoration: BoxDecoration(
-                      color: color.borderColor,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(24),
-                        topRight: Radius.circular(24)
-                      )
-                    ),
-                    height: sz.height * 0.95,
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.only(bottom: sz.height * 0.02),
-                          color: color.backColor,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween ,
-                            children: [
-                              IconButton(
-                                onPressed: (){
-                                  Navigator.pop(context);
-                                },
-                                icon: Icon(Icons.arrow_back),
-                                color: color.white,
-                              ),
-                              Text('add_custom_token'.tr, style: TextStyle(fontSize: 20, color: color.white)),
-                              IconButton(   // -----------------------------------------------------------------------------------------------
-                                onPressed: () async {
-                                  String result = await Navigator.push(context, MaterialPageRoute(builder: (context)=> QRCodeReaderPage()));
-                                  // String result = await Get.toNamed(PageNames.qrreader);
-                                  result = result.replaceAll('ethereum:', '');
-                                  this.initFields();
-                                  setState((){
-                                    _addressController.text = result;
-                                  });
-                                  if(!Strings.Address_Reg.hasMatch(result)){
-                                    return;
-                                  }
-                                  findContractToken(context);
-                                },
-                                icon: Icon(Icons.qr_code_scanner), color: color.white, iconSize: 25
-                              )
-                            ],
+                  SizedBox(width: 15),
+                  GestureDetector(
+                    onTap: (){
+                      Size sz = Get.size;
+                      this.initFields();
+                      this.setInitData();
+                      AnimationController _animController = BottomSheet.createAnimationController(this);
+                      _animController.duration = Duration(milliseconds: 800);
+                      showModalBottomSheet(
+                        transitionAnimationController: _animController,
+                        isScrollControlled:true,
+                        enableDrag: false,
+                        isDismissible: false,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(40),
+                            topRight: Radius.circular(40),
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: Get.width * 0.02),
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: sz.width * 0.06, vertical: sz.height * 0.05),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10)
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: color.borderColor.withOpacity(0.5),
-                                  spreadRadius: 5,
-                                  blurRadius: 7,
-                                  offset: Offset(0, 3), // changes position of shadow
-                                ),
-                              ],
+                        barrierColor: color.backColor.withOpacity(0.2),
+                        context: context,
+                        builder: (context) => Container(
+                          padding: EdgeInsets.only(top: Get.height * 0.07, left: Get.width * 0.05, right: Get.width * 0.05),
+                          decoration: BoxDecoration(
+                            color: color.white,
+                            image: DecorationImage(
+                              image: AssetImage("assets/images/background.png"),
+                              fit: BoxFit.cover,
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Row(
+                          ),
+                          height: sz.height * 1,
+                          child: Column(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.only( bottom: Get.height * 0.05),
+                                child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text('network'.tr, style: TextStyle(color: color.contrastTextColor, fontSize: 16)),
-                                    TextButton(
-                                      onPressed: (){
-                                        Get.defaultDialog(
-                                          backgroundColor: color.btnSecondaryColor,
-                                          title: 'Select Network'.tr,
-                                          titleStyle: TextStyle(color: color.foreColor),
-                                          content: Padding(
-                                            padding: EdgeInsets.symmetric(horizontal: Get.width * 0.03, vertical: 8),
-                                            child: Container(
-                                              height: sz.height * 0.45,
-                                              child: SingleChildScrollView(
-                                                child: Column(
-                                                  children: List.generate(Chains.chains.length, (idx){
-                                                    return Padding(
-                                                      padding: EdgeInsets.symmetric(vertical: 7),
-                                                      child: ElevatedButton(
-                                                        child: Row(
-                                                          children: [
-                                                            Row(
-                                                              children: [
-                                                                ClipRRect(
-                                                                  borderRadius: BorderRadius.circular(9.0),
-                                                                  child: ClipRRect(
-                                                                    borderRadius: BorderRadius.circular(20.0),
-                                                                    child: CachedNetworkImage(
-                                                                      fit: BoxFit.cover,
-                                                                      width: 40,
-                                                                      height: 40,
-                                                                      imageUrl: Chains.chains[idx].logo,
-                                                                      placeholder: (context, url) => CircularProgressIndicator(),
-                                                                      errorWidget: (context, url, error) => Image.asset('assets/images/coin.png'),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                SizedBox(width: 15),
-                                                                Container(
-                                                                  width: sz.width * 0.35,
-                                                                  child: Text(Chains.chains[idx].symbol, style: TextStyle(color: color.white, fontSize: 16))
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        onPressed: () async{
-                                                          context.read<TokenProvider>().setNetwork(idx);
-                                                          // web3Controller.changeNetwork(idx);
-                                                          Get.back();
-                                                        },
-                                                        style: ElevatedButton.styleFrom(
-                                                          onSurface: Colors.brown,
-                                                          primary: color.backColor,
-                                                          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                                                          textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
-                                                        ),
-                                                      ),
-                                                    );
-                                                  })
-                                                ),
-                                              ),
-                                            )
-                                          )
-                                        );
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: (){
+                                            Get.back();
+                                          },
+                                          child: Icon(LineIcons.arrowLeft, color: color.textColor, size: 30),
+                                        ),
+                                        SizedBox(width: 15),
+                                        Text('add_custom_token'.tr,
+                                            style: TextStyle(color: color.foreColor, fontFamily: Strings.fMedium, fontSize: 18)
+                                        )
+                                      ],
+                                    ),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        String result = await Navigator.push(context, MaterialPageRoute(builder: (context)=> QRCodeReaderPage()));
+                                        result = result.replaceAll('ethereum:', '');
+                                        this.initFields();
+                                        setState((){
+                                          _addressController.text = result;
+                                        });
+                                        if(!Strings.Address_Reg.hasMatch(result)){
+                                          return;
+                                        }
+                                        findContractToken(context);
                                       },
-                                      child: Container(
-                                        alignment: Alignment.centerRight,
-                                        width: sz.width * 0.5,
-                                        child: Text(Chains.chains[context.watch<TokenProvider>().network].symbol + '  >', textAlign: TextAlign.end, style: TextStyle(color: color.foreColor, fontSize: 16), overflow: TextOverflow.ellipsis)
-                                      )
+                                      child: Image.asset('assets/images/scan.png'),
                                     )
                                   ],
                                 ),
-                                TextFormField(
-                                  controller: _addressController,
-                                  cursorColor: color.foreColor,
-                                  style: TextStyle(color: color.contrastTextColor),
-                                  keyboardType: TextInputType.text,
-                                  onChanged: (value) async{  // ----------------------------------------------------------------------------------------
-                                    if(!Strings.Address_Reg.hasMatch(value)) {
-                                      setState(() {
-                                        context.read<ParamsProvider>().setIsActive(false);
-                                        this._symbolController.text = '';
-                                        this._nameController.text = '';
-                                      });
-                                      return;
-                                    }
-                                    findContractToken(context);
-                                  },
-                                  decoration: InputDecoration(
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: color.isDarkMode ? color.foreColor : color.backColor)
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: color.contrastTextColor)
-                                    ),
-                                    contentPadding: EdgeInsets.only(left: 15, bottom: 20, top: 20, right: 15),
-                                    hintText: 'contract_address'.tr,
-                                    hintStyle: TextStyle(color: color.isDarkMode ? Color(0x55FFFFFF) : Color(0xFFB0B0B0)),
-                                    suffixIcon: OutlinedButton(  // ------------------------------------------------------------------------ change
+                              ),
+                              Container(
+                                padding: EdgeInsets.symmetric(vertical: sz.height * 0.02),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    SettingItemButton(
+                                      leftWidget: Row(
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(9.0),
+                                            child: Image.asset(
+                                              'assets/images/wallet-icon.png',
+                                              fit: BoxFit.cover,
+                                              width: 30,
+                                              height: 30
+                                            ),
+                                          ),
+                                          SizedBox(width: 15),
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text('network'.tr, style: TextStyle(color: color.foreColor, fontSize: 14, fontFamily: Strings.fSemiBold)),
+                                              Text(Chains.chains[context.watch<TokenProvider>().network].symbol, style: TextStyle(color: color.btnPrimaryColor, fontSize: 14, fontFamily: Strings.fRegular))
+                                            ]
+                                          ),
+                                        ],
+                                      ),
+                                      rightWidget: Icon(Icons.arrow_forward_ios_outlined, size: 26, color: color.isDarkMode ? color.foreColor : color.foreColor),
                                       onPressed: (){
-                                        this.initFields();
-                                        FlutterClipboard.paste().then((txt) async{
+                                        Get.defaultDialog(
+                                          backgroundColor: color.btnSecondaryColor,
+                                          title: '', // 'select_network'.tr,
+                                          titleStyle: TextStyle(fontSize: 0),
+                                          radius: 7,
+                                          content: Padding(
+                                            padding: EdgeInsets.only(left: Get.width * 0.03, right: Get.width * 0.03, bottom: Get.height * 0.03),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                                              children: [
+                                                Text('select_network'.tr, style: TextStyle(color: color.foreColor, fontFamily: Strings.fSemiBold, fontSize: 18)),
+                                                SizedBox(height: 10),
+                                                Container(
+                                                  height: sz.height * 0.4,
+                                                  child: SingleChildScrollView(
+                                                    child: Column(
+                                                      children: List.generate(Chains.chains.length, (idx){
+                                                        return ModalNetworkItem(
+                                                          url: Chains.chains[idx].logo,
+                                                          name: Chains.chains[idx].symbol,
+                                                          selected: context.read<TokenProvider>().network == idx,
+                                                          onPressed: () async{
+                                                            context.read<TokenProvider>().setNetwork(idx);
+                                                            Get.back();
+                                                          },
+                                                        );
+                                                      })
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          )
+                                        );
+                                      }
+                                    ),
+                                    SizedBox(height: Get.height * 0.03),
+                                    CustomTextField(
+                                      controller: _addressController,
+                                      hint: 'contract_address'.tr,
+                                      keyType: 1,
+                                      onChange: (value){
+                                        if(!Strings.Address_Reg.hasMatch(value)) {
                                           setState(() {
-                                            this._addressController.text = txt;
+                                            context.read<ParamsProvider>().setIsActive(false);
+                                            this._symbolController.text = '';
+                                            this._nameController.text = '';
                                           });
-                                          if(!Strings.Address_Reg.hasMatch(txt)) return;
-                                          findContractToken(context);
-                                        });
+                                          return;
+                                        }
+                                        findContractToken(context);
                                       },
-                                      style: OutlinedButton.styleFrom(
-                                        primary: Colors.white,
-                                        side: BorderSide(color: Colors.transparent, width: 0),
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0))),
-                                      ),
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(vertical: 0),
-                                        child: Text('paste'.tr, style: TextStyle(color: color.foreColor, fontSize: 14)),
-                                      ),
+                                    ),
+                                    SizedBox(height: Get.height * 0.03),
+                                    CustomTextField(
+                                      controller: _nameController,
+                                      hint: 'name'.tr,
+                                      keyType: 1,
+                                      enabled: false,
+                                    ),
+                                    SizedBox(height: Get.height * 0.03),
+                                    CustomTextField(
+                                      controller: _symbolController,
+                                      hint: 'symbol'.tr,
+                                      keyType: 1,
+                                      enabled: false,
+                                    ),
+                                    SizedBox(height: Get.height * 0.03),
+                                    CustomTextField(
+                                      controller: _decimalController,
+                                      hint: 'decimals'.tr,
+                                    ),
+                                    SizedBox(height: Get.height * 0.03),
+                                    PrimaryButton(
+                                      title: 'add_token'.tr,
+                                      isActive: context.watch<ParamsProvider>().isActive,
+                                      onPressed: () async{
+                                        if(_nameController.text == '' || _symbolController.text == '' || _addressController.text == '') {
+                                          Get.snackbar('Error'.tr, "Failed to get token information",
+                                              colorText: color.foreColor,
+                                              backgroundColor: color.btnSecondaryColor,
+                                              isDismissible: true
+                                          );
+                                        }
+                                        TokenInfo t = TokenInfo.fromMap({
+                                          'logo': this.image,
+                                          'name': _nameController.text,
+                                          'address': _addressController.text,
+                                          'symbol': _symbolController.text,
+                                          'tokenId': this.tokenId,
+                                          'chainId': context.read<TokenProvider>().network,
+                                          'isActive': 0
+                                        });
+                                        bool isNew = await sqliteController.insertTokenData(t);
+                                        if(isNew) {
+                                          context.read<TokenProvider>().addToken(t);
+                                          if(context.read<TokenProvider>().curNetwork == context.read<TokenProvider>().network) this.tokens.add(t);
+                                          setState(() {
+                                            this.tokens = this.tokens;
+                                          });
+                                        }
+                                        Navigator.pop(context);
+                                      }
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                    child: Icon(Icons.add_box_outlined, color: color.textColor),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: List.generate(this.tokens.length, (index){
+                    return Container(
+                      margin: EdgeInsets.symmetric(vertical: 7),
+                      padding: EdgeInsets.symmetric(horizontal: Get.width * 0.03, vertical: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Row(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(9.0),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    child: CachedNetworkImage(
+                                      fit: BoxFit.cover,
+                                      width: 40,
+                                      height: 40,
+                                      imageUrl: this.tokens[index].logo,
+                                      errorWidget: (context, url, error) => Image.asset('assets/images/coin.png'),
+                                      placeholder: (context, url) => CircularProgressIndicator()
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: Get.height * 0.03),
-                                TextFormField(
-                                  controller: _nameController,
-                                  cursorColor: color.foreColor,
-                                  style: TextStyle(color: color.contrastTextColor),
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: color.isDarkMode ? color.foreColor : color.backColor)
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: color.contrastTextColor)
-                                    ),
-                                    contentPadding: EdgeInsets.only(left: 20, bottom: 20, top: 20, right: 20),
-                                    hintText: 'name'.tr,
-                                    hintStyle: TextStyle(color: color.isDarkMode ? Color(0x55FFFFFF) : Color(0xFFB0B0B0)),
-                                  ),
-                                ),
-                                SizedBox(height: Get.height * 0.03),
-                                TextFormField(
-                                  controller: _symbolController,
-                                  cursorColor: color.foreColor,
-                                  style: TextStyle(color: color.contrastTextColor),
-                                  keyboardType: TextInputType.number,
-                                  enabled: false,
-                                  decoration: InputDecoration(
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: color.isDarkMode ? color.foreColor : color.backColor)
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: color.contrastTextColor)
-                                    ),
-                                    disabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: color.contrastTextColor)
-                                    ),
-                                    contentPadding: EdgeInsets.only(left: 20, bottom: 20, top: 20, right: 20),
-                                    hintText: 'symbol'.tr,
-                                    hintStyle: TextStyle(color: color.isDarkMode ? Color(0x55FFFFFF) : Color(0xFFB0B0B0)),
-                                  ),
-                                ),
-                                SizedBox(height: Get.height * 0.03),
-                                TextFormField(
-                                  controller: _decimalController,
-                                  cursorColor: color.foreColor,
-                                  style: TextStyle(color: color.white),
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: color.isDarkMode ? color.foreColor : color.backColor)
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: color.contrastTextColor)
-                                    ),
-                                    disabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: color.contrastTextColor)
-                                    ),
-                                    contentPadding: EdgeInsets.only(left: 20, bottom: 20, top: 20, right: 20),
-                                    hintText: 'decimals'.tr,
-                                    hintStyle: TextStyle(color: color.isDarkMode ? Color(0x55FFFFFF) : Color(0xFFB0B0B0)),
-                                  ),
-                                ),
-                                SizedBox(height: Get.height * 0.03),
-                                ElevatedButton(
-                                  child: Text('add_token'.tr),
-                                  onPressed: !context.watch<ParamsProvider>().isActive ? null : () async{
-                                    if(_nameController.text == '' || _symbolController.text == '' || _addressController.text == '') {
-                                      Get.snackbar('Error'.tr, "Failed to get token information",
-                                        colorText: color.foreColor,
-                                        backgroundColor: color.btnSecondaryColor,
-                                        isDismissible: true
-                                      );
-                                    }
-                                    TokenInfo t = TokenInfo.fromMap({
-                                      'logo': this.image,
-                                      'name': _nameController.text,
-                                      'address': _addressController.text,
-                                      'symbol': _symbolController.text,
-                                      'tokenId': this.tokenId,
-                                      'chainId': context.read<TokenProvider>().network,
-                                      'isActive': 0
-                                    });
-                                    bool isNew = await sqliteController.insertTokenData(t);
-                                    if(isNew) {
-                                      context.read<TokenProvider>().addToken(t);
-                                      if(context.read<TokenProvider>().curNetwork == context.read<TokenProvider>().network) this.tokens.add(t);
-                                      setState(() {
-                                        this.tokens = this.tokens;
-                                      });
-                                    }
-                                    Navigator.pop(context);
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    onSurface: Colors.brown,
-                                    primary: color.foreColor,
-                                    padding: EdgeInsets.symmetric(vertical: 15),
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-                                    textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
-                                  ),
-                                ),
+                                SizedBox(width: 15),
+                                Expanded(child: Text(this.tokens[index].name, overflow: TextOverflow.ellipsis , style: TextStyle(color: color.foreColor, fontSize: 16, fontFamily: Strings.fSemiBold))),
                               ],
                             ),
                           ),
-                        ),
-                        Container()
-                      ],
-                    ),
-                  ),
-                );
-              },
-              icon: Icon(Icons.add_circle_outline), color: color.white,
-            ),
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: Get.width * 0.05, vertical: Get.height * 0.03),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: List.generate(this.tokens.length, (index){
-              return Padding(
-                padding: EdgeInsets.symmetric(vertical: 7),
-                child: ElevatedButton(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(9.0),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20.0),
-                              child: CachedNetworkImage(
-                                fit: BoxFit.cover,
-                                width: 40,
-                                height: 40,
-                                imageUrl: this.tokens[index].logo,
-                                errorWidget: (context, url, error) => Image.asset('assets/images/coin.png'),
-                                placeholder: (context, url) => CircularProgressIndicator()
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 15),
-                          Text(this.tokens[index].name, style: TextStyle(color: color.contrastTextColor, fontSize: 16)),
+                          GestureDetector(
+                            onTap: (){
+                              for(var i = 0; i < context.read<TokenProvider>().allTokens.length; i ++){
+                                if(context.read<TokenProvider>().allTokens[i].name == this.tokens[index].name)  context.read<TokenProvider>().toggleActive(i);
+                              }
+                              setState(() {
+                                this.tokens[index].isActive = this.tokens[index].isActive;
+                              });
+                            },
+                            child: Image.asset(this.tokens[index].isActive ? 'assets/images/switch-on.png' : 'assets/images/switch-off.png'),
+                          )
                         ],
                       ),
-                      Switch(
-                        value: this.tokens[index].isActive,
-                        onChanged: (value) {
-                          for(var i = 0; i < context.read<TokenProvider>().allTokens.length; i ++){
-                            if(context.read<TokenProvider>().allTokens[i].name == this.tokens[index].name)  context.read<TokenProvider>().toggleActive(i);
-                          }
-                          setState(() {
-                            this.tokens[index].isActive = this.tokens[index].isActive;
-                          });
-                        },
-                        activeTrackColor: color.isDarkMode ? color.white : color.backColor,
-                        activeColor: color.foreColor,
-                      )
-                    ],
-                  ),
-                  onPressed: () async{},
-                  style: ElevatedButton.styleFrom(
-                    onSurface: Colors.brown,
-                    primary: color.btnSecondaryColor,
-                    padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                    textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    elevation: 5.0,
-                    shadowColor: color.black
-                  ),
+                      decoration: BoxDecoration(
+                        color: color.white,
+                        borderRadius: BorderRadius.all(Radius.circular(7)),
+                        border: Border.all(color: color.borderColor, width: 2),
+                      ),
+                    );
+                  })
                 ),
-              );
-            })
-          ),
+              ),
+            ),
+          ],
         ),
       ),
     );

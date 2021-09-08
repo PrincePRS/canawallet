@@ -74,6 +74,7 @@ const Map<String, String> ch = {
   'sent': '发送',
   'received': '已收到',
   'select_network': '选择网络',
+  'select_token': '选择令牌',
   'notify': '通知',
   'coming_soon': '即将推出...',
   'sender': '发件人',

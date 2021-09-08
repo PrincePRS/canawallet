@@ -7,12 +7,16 @@ class CustomTextField extends StatelessWidget {
   final int keyType;
   final String hint;
   final Widget? suffix;
+  final bool enabled;
+  final Function(String val)? onChange;
   const CustomTextField({
     Key? key,
     required this.controller,
     this.keyType = 0,
     required this.hint,
-    this.suffix
+    this.suffix,
+    this.onChange,
+    this.enabled = true
   }) : super(key: key);
 
   @override
@@ -24,16 +28,21 @@ class CustomTextField extends StatelessWidget {
       keyboardType: keyType == 0 ? TextInputType.number : TextInputType.text,
       decoration: InputDecoration(
         focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: color.isDarkMode ? color.borderColor : color.borderColor)
+            borderSide: BorderSide(color: color.isDarkMode ? color.borderColor : color.borderColor, width: 2)
         ),
         enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: color.borderColor)
+            borderSide: BorderSide(color: color.borderColor, width: 2)
+        ),
+        disabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: color.borderColor, width: 2)
         ),
         contentPadding: EdgeInsets.only(left: 20, bottom: 20, top: 20, right: 20),
         hintText: hint,
         hintStyle: TextStyle(color: color.isDarkMode ? color.lightTextColor : color.lightTextColor, fontFamily: Strings.fRegular, fontSize: 14),
         suffixIcon: suffix == null ? Container(width: 0) : suffix
       ),
+      onChanged: onChange,
+      enabled: enabled,
     );
   }
 }

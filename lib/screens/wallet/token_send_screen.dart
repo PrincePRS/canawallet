@@ -200,11 +200,11 @@ class _SendTokenScreenState extends State<SendTokenScreen> with TickerProviderSt
                       : Container(
                     color: color.contrastColor,
                     child: ListView(
-                      padding: EdgeInsets.symmetric(horizontal: Get.width * 0.04, vertical: Get.height * 0.01),
+                      padding: EdgeInsets.symmetric(horizontal: Get.width * 0.05, vertical: Get.height * 0.01),
                       children: List.generate(this.transactions.length, (index){
                         return Padding(
                           padding: EdgeInsets.only(bottom: 15),
-                          child: ElevatedButton(
+                          child: OutlinedButton(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -212,9 +212,14 @@ class _SendTokenScreenState extends State<SendTokenScreen> with TickerProviderSt
                                   child: Container(
                                     child: Row(
                                       children: [
-                                        ClipRRect(
-                                            borderRadius: BorderRadius.circular(9.0),
-                                            child: Icon(transactions[index].isSent ? Icons.upload_sharp : Icons.download_sharp, size: 26, color: color.btnPrimaryColor)
+                                        Container(
+                                          padding: EdgeInsets.all(11),
+                                          // child: Icon(transactions[index].isSent ? Icons.upload_sharp : Icons.download_sharp, size: 26, color: color.btnPrimaryColor),
+                                          child: Image.asset(transactions[index].isSent ? 'assets/images/bsend-icon.png' : 'assets/images/breceive-icon.png'),
+                                          decoration: BoxDecoration(
+                                            color: color.white,
+                                            borderRadius: BorderRadius.circular(30)
+                                          ),
                                         ),
                                         SizedBox(width: 5),
                                         Expanded(
@@ -245,11 +250,11 @@ class _SendTokenScreenState extends State<SendTokenScreen> with TickerProviderSt
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      Text(transactions[index].isSent ? '-' : '+', style: TextStyle(color: this.transactions[index].isSent ? color.foreColor : Colors.green, fontSize: 14, fontFamily: Strings.fSemiBold)),
+                                      Text(transactions[index].isSent ? '-' : '+', style: TextStyle(color: this.transactions[index].isSent ? color.warn : color.btnPrimaryColor, fontSize: 14, fontFamily: Strings.fSemiBold)),
                                       Expanded(
                                         child: Text(this.transactions[index].value.toString() + context.read<TokenProvider>().tokens[this.selToken].symbol.toUpperCase(),
                                           overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(color: this.transactions[index].isSent ? color.foreColor : Colors.green, fontSize: 18)
+                                          style: TextStyle(color: this.transactions[index].isSent ? color.warn : color.btnPrimaryColor, fontSize: 18)
                                         )
                                       ),
                                     ],
@@ -261,13 +266,12 @@ class _SendTokenScreenState extends State<SendTokenScreen> with TickerProviderSt
                               context.read<ParamsProvider>().setTransaction(this.transactions[index]);
                               Get.toNamed(PageNames.txInfo);
                             },
-                            style: ElevatedButton.styleFrom(
-                              onSurface: Colors.brown,
-                              primary: color.btnSecondaryColor,
-                              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                              textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                              elevation: 5.0
+                            style: OutlinedButton.styleFrom(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              primary: color.contrastColor,
+                              onSurface: Colors.green,
+                              side: BorderSide(color: color.backColor, width: 0),
+                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0))),
                             ),
                           )
                         );

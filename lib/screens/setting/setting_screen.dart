@@ -1,3 +1,4 @@
+import 'package:cancoin_wallet/component/setting_components.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cancoin_wallet/constants/page_names.dart';
@@ -52,10 +53,10 @@ class _SettingScreenState extends State<SettingScreen> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(9.0),
                               child: Image.asset(
-                                  'assets/images/wallet-icon.png',
-                                  fit: BoxFit.cover,
-                                  width: 35,
-                                  height: 35
+                                'assets/images/wallet-icon.png',
+                                fit: BoxFit.cover,
+                                width: 35,
+                                height: 35
                               ),
                             ),
                             SizedBox(width: 15),
@@ -93,10 +94,10 @@ class _SettingScreenState extends State<SettingScreen> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(9.0),
                               child: Image.asset(
-                                  'assets/images/theme-icon.png',
-                                  fit: BoxFit.cover,
-                                  width: 35,
-                                  height: 35
+                                'assets/images/theme-icon.png',
+                                fit: BoxFit.cover,
+                                width: 35,
+                                height: 35
                               ),
                             ),
                             SizedBox(width: 15),
@@ -154,37 +155,26 @@ class _SettingScreenState extends State<SettingScreen> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 10, left: Get.width * 0.05, right: Get.width * 0.05),
-                  child: OutlinedButton(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: SettingItemButton(
+                    leftWidget: Row(
                       children: [
-                        Row(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(9.0),
-                              child: Image.asset(
-                                'assets/images/security-icon.png',
-                                fit: BoxFit.cover,
-                                width: 35,
-                                height: 35
-                              ),
-                            ),
-                            SizedBox(width: 15),
-                            Text('security'.tr, style: TextStyle(color: color.foreColor, fontSize: 16, fontFamily: Strings.fSemiBold)),
-                          ],
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(9.0),
+                          child: Image.asset(
+                              'assets/images/security-icon.png',
+                              fit: BoxFit.cover,
+                              width: 35,
+                              height: 35
+                          ),
                         ),
-                        Icon(Icons.arrow_forward_ios_outlined, size: 26, color: color.isDarkMode ? color.foreColor : color.foreColor)
+                        SizedBox(width: 15),
+                        Text('security'.tr, style: TextStyle(color: color.foreColor, fontSize: 16, fontFamily: Strings.fSemiBold)),
                       ],
                     ),
-                    onPressed: () async{
+                    rightWidget: Icon(Icons.arrow_forward_ios_outlined, size: 26, color: color.isDarkMode ? color.foreColor : color.foreColor),
+                    onPressed: (){
                       Get.toNamed(PageNames.security);
                     },
-                    style: ElevatedButton.styleFrom(
-                        primary: color.white,
-                        side: BorderSide(color: color.borderColor, width: 3),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
-                        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15)
-                    ),
                   ),
                 ),
                 Padding(
@@ -300,3 +290,4 @@ class _SettingScreenState extends State<SettingScreen> {
     });
   }
 }
+

@@ -95,18 +95,14 @@ class _SignTransactionScreenState extends State<SignTransactionScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: (){
-                        Get.back();
-                      },
-                      child: Icon(LineIcons.arrowLeft, color: color.textColor, size: 30),
-                    ),
-                    SizedBox(width: 15),
-                    Text('confirm'.tr, style: TextStyle(color: color.foreColor, fontFamily: Strings.fMedium, fontSize: 18)
-                    ),
-                  ],
+                GestureDetector(
+                  onTap: (){
+                    Get.back();
+                  },
+                  child: Icon(LineIcons.arrowLeft, color: color.textColor, size: 30),
+                ),
+                SizedBox(width: 15),
+                Text('confirm'.tr, style: TextStyle(color: color.foreColor, fontFamily: Strings.fMedium, fontSize: 18)
                 )
               ],
             ),

@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:cancoin_wallet/global.dart';
 import 'package:cancoin_wallet/provider/params_controller.dart';
 import 'package:cancoin_wallet/provider/token_provider.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:coingecko_dart/coingecko_dart.dart';
 import 'package:cancoin_wallet/constants/chains.dart';
@@ -132,7 +133,7 @@ class _ChartScreenState extends State<ChartScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: Get.width * 0.01, right: Get.width * 0.01, top: Get.height * 0.06, bottom: Get.height * 0.02),
+      padding: EdgeInsets.only(left: Get.width * 0.05, right: Get.width * 0.05, top: Get.height * 0.07, bottom: Get.height * 0.02),
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage("assets/images/background.png"),
@@ -148,12 +149,13 @@ class _ChartScreenState extends State<ChartScreen> {
               children: [
                 Row(
                   children: [
-                    IconButton(
-                      onPressed: (){
+                    GestureDetector(
+                      onTap: (){
                         Get.back();
                       },
-                      icon: Icon(Icons.arrow_back, color: color.textColor, size: 30),
+                      child: Icon(LineIcons.arrowLeft, color: color.textColor, size: 30),
                     ),
+                    SizedBox(width: 15),
                     Text(context.watch<ParamsProvider>().transaction.isSent ? 'sent'.tr : 'received'.tr,
                         style: TextStyle(color: color.foreColor, fontFamily: Strings.fMedium, fontSize: 18)
                     ),
@@ -165,7 +167,7 @@ class _ChartScreenState extends State<ChartScreen> {
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: Get.width * 0.03, vertical: Get.height * 0.02),
+                padding: EdgeInsets.symmetric(vertical: Get.height * 0.02),
                 child: Container(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -173,8 +175,8 @@ class _ChartScreenState extends State<ChartScreen> {
                       Container(
                         padding: EdgeInsets.symmetric(vertical: 20),
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                            border: Border.all(color: color.borderColor, width: 2),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          border: Border.all(color: color.borderColor, width: 2),
                           color: color.white
                         ),
                         child: Column(

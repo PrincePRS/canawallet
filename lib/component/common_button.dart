@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cancoin_wallet/constants/strings.dart';
 import 'package:cancoin_wallet/global.dart';
 import 'package:flutter/material.dart';
@@ -88,3 +89,110 @@ class SuffixTextButton extends StatelessWidget {
     );
   }
 }
+
+class ModalNetworkItem extends StatelessWidget {
+  final String url;
+  final String name;
+  final bool selected;
+  final Function() onPressed;
+  const ModalNetworkItem({
+    Key? key,
+    required this.url,
+    required this.name,
+    required this.selected,
+    required this.onPressed
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context){
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 7),
+      child: OutlinedButton(
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(9.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20.0),
+                child: CachedNetworkImage(
+                  fit: BoxFit.cover,
+                  width: 40,
+                  height: 40,
+                  imageUrl: url,
+                  placeholder: (context, url) => CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => Image.asset('assets/images/coin.png'),
+                ),
+              ),
+            ),
+            Expanded(
+                child: Text(name, style: TextStyle(color: color.foreColor, fontSize: 14, fontFamily: Strings.fMedium))
+            ),
+            Image.asset(selected ?  'assets/images/selected.png' : 'assets/images/unselected.png')
+          ],
+        ),
+        onPressed: onPressed,
+        style: OutlinedButton.styleFrom(
+          onSurface: Colors.brown,
+          primary: color.borderColor,
+          side: BorderSide(color:  color.borderColor, width: 2),
+          padding: EdgeInsets.only(top: 15, bottom: 15, left: 10, right: 10),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+          textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
+}
+
+class ModalTokenItem extends StatelessWidget {
+  final String url;
+  final String name;
+  final Function() onPressed;
+  const ModalTokenItem({
+    Key? key,
+    required this.url,
+    required this.name,
+    required this.onPressed
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context){
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 7),
+      child: OutlinedButton(
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(9.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20.0),
+                child: CachedNetworkImage(
+                  fit: BoxFit.cover,
+                  width: 40,
+                  height: 40,
+                  imageUrl: url,
+                  placeholder: (context, url) => CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => Image.asset('assets/images/coin.png'),
+                ),
+              ),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+                child: Text(name, style: TextStyle(color: color.foreColor, fontSize: 14, fontFamily: Strings.fMedium))
+            ),
+          ],
+        ),
+        onPressed: onPressed,
+        style: OutlinedButton.styleFrom(
+          onSurface: Colors.brown,
+          primary: color.borderColor,
+          side: BorderSide(color:  color.borderColor, width: 2),
+          padding: EdgeInsets.only(top: 15, bottom: 15, left: 10, right: 10),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+          textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
+}
+

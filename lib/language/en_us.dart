@@ -74,6 +74,7 @@ const Map<String, String> en = {
   'sent': 'Sent',
   'received': 'Received',
   'select_network': 'Select Network',
+  'select_token': 'Select Token',
   'notify': 'Notifications',
   'coming_soon': 'Coming Soon...',
   'sender': 'Sender',
