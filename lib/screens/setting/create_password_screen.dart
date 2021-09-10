@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cancoin_wallet/constants/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cancoin_wallet/global.dart';
@@ -28,18 +29,32 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    // TODO: implement initState
+    pincodeController.clear();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: color.backColor,
-      body: Padding(
+      body: Container(
         padding: EdgeInsets.only(left: Get.width * 0.07, right: Get.width * 0.07, top: Get.height * 0.2),
+        decoration: BoxDecoration(
+          color: color.white,
+          image: DecorationImage(
+            image: AssetImage("assets/images/background.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(this.title.tr, style: TextStyle(color: color.foreColor, fontSize: 26, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+            Text(this.title.tr, style: TextStyle(color: color.foreColor, fontSize: 26, fontFamily: Strings.fBold), textAlign: TextAlign.left),
             SizedBox(height: Get.height * 0.05),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: Get.width * 0.03, vertical: Get.height * 0.04),
@@ -47,13 +62,15 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                 appContext: context,
                 length: 6,
                 obscureText: true,
-                obscuringWidget: Image.asset('assets/images/king_icon.png', width: 30, height: 30, fit: BoxFit.cover),
+                obscuringWidget: Image.asset('assets/images/splash-logo.png', width: 30, height: 30, fit: BoxFit.cover),
                 animationType: AnimationType.fade,
                 keyboardType: TextInputType.number,
                 autoFocus: true,
                 pinTheme: PinTheme(
                   shape: PinCodeFieldShape.box,
-                  inactiveColor: color.btnSecondaryColor,
+                  inactiveColor: color.borderColor,
+                  activeColor: color.btnPrimaryColor,
+                  selectedColor: color.contrastTextColor,
                   activeFillColor: color.foreColor,
                   borderRadius: BorderRadius.circular(5),
                   fieldHeight: 50,

@@ -28,21 +28,23 @@ class _GuardScreenState extends State<GuardScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset('assets/images/locked-circle.png', width: 250, height: 250, fit: BoxFit.cover),
+            Image.asset('assets/images/banner4.png', width: 250, height: 250, fit: BoxFit.cover),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: Get.width * 0.03, vertical: Get.height * 0.04),
               child: PinCodeTextField(
                 appContext: context,
                 length: 6,
                 obscureText: true,
-                obscuringWidget: Image.asset('assets/images/king_icon.png', width: 30, height: 30, fit: BoxFit.cover),
+                obscuringWidget: Image.asset('assets/images/splash-logo.png', width: 30, height: 30, fit: BoxFit.cover),
                 animationType: AnimationType.fade,
                 keyboardType: TextInputType.number,
                 autoFocus: true,
                 autoDismissKeyboard: true,
                 pinTheme: PinTheme(
                   shape: PinCodeFieldShape.box,
-                  inactiveColor: color.btnSecondaryColor,
+                  inactiveColor: color.borderColor,
+                  activeColor: color.btnPrimaryColor,
+                  selectedColor: color.contrastTextColor,
                   activeFillColor: color.foreColor,
                   borderRadius: BorderRadius.circular(5),
                   fieldHeight: 50,

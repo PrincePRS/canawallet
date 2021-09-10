@@ -135,73 +135,76 @@ class _WalletTokenState extends State<WalletToken> {
                                             scrollDirection: Axis.vertical,
                                             child: Column(
                                                 children: List.generate(context.read<TokenProvider>().allTokens.length + 1, (idx){
-                                                  if(idx == 0) return Padding(
-                                                    padding: EdgeInsets.symmetric(vertical: 7),
-                                                    child: OutlinedButton(
-                                                      key: Key('sendToken' + idx.toString()),
-                                                      child: Row(
-                                                        children: [
-                                                          Row(
-                                                            children: [
-                                                              Container(
-                                                                padding: EdgeInsets.all(11),
-                                                                // child: Icon(transactions[index].isSent ? Icons.upload_sharp : Icons.download_sharp, size: 26, color: color.btnPrimaryColor),
-                                                                child: Image.asset('assets/images/scan.png'),
-                                                                decoration: BoxDecoration(
-                                                                    color: color.white,
-                                                                    borderRadius: BorderRadius.circular(30)
-                                                                ),
-                                                              ),
-                                                              Text('QR SCAN', style: TextStyle(color: color.foreColor, fontSize: 14, fontFamily: Strings.fMedium)),
-                                                            ],
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      onPressed: () async{
-                                                        String result = await Navigator.push(context, MaterialPageRoute(builder: (context)=> QRCodeReaderPage()));
-                                                        List<String> splits = result.split(':');
-                                                        if(splits.length != 3 || !isNumeric(splits[2]) || !Strings.Address_Reg.hasMatch(splits[1])){
-                                                          Get.snackbar('QRCode Format Error'.tr, result,
-                                                              colorText: color.foreColor,
-                                                              backgroundColor: color.btnSecondaryColor,
-                                                              isDismissible: true
-                                                          );
-                                                          return;
-                                                        }
-
-                                                        for(var i = 0; i < context.read<TokenProvider>().allTokens.length; i ++){
-                                                          if(splits[0] == context.read<TokenProvider>().allTokens[i].tokenId){
-                                                            context.read<TokenProvider>().changeNetwork(context.read<TokenProvider>().allTokens[i].chainId);
-                                                            break;
-                                                          }
-                                                        }
-                                                        for(var i = 0; i < context.read<TokenProvider>().tokens.length; i ++){
-                                                          if(splits[0] == context.read<TokenProvider>().tokens[i].tokenId){
-                                                            context.read<ParamsProvider>().setTokenId(i);
-                                                            context.read<ParamsProvider>().setReceiver(splits[1]);
-                                                            context.read<ParamsProvider>().setAmount(splits[2]);
-                                                            Get.back();
-                                                            Get.toNamed(PageNames.transferForm);
-                                                            return;
-                                                          }
-                                                        }
-
-                                                        Get.snackbar('Undefined Token'.tr, 'Please add token, first',
-                                                            colorText: color.foreColor,
-                                                            backgroundColor: color.btnSecondaryColor,
-                                                            isDismissible: true
-                                                        );
-                                                      },
-                                                      style: OutlinedButton.styleFrom(
-                                                        onSurface: Colors.brown,
-                                                        primary: color.borderColor,
-                                                        side: BorderSide(color:  color.borderColor, width: 2),
-                                                        padding: EdgeInsets.only(top: 15, bottom: 15, left: 10, right: 10),
-                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
-                                                        textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                                      ),
-                                                    ),
-                                                  );
+                                                  if(idx == 0) return Container();
+                                                  // if(idx == 0) return Padding(
+                                                  //   padding: EdgeInsets.symmetric(vertical: 7),
+                                                  //   child: OutlinedButton(
+                                                  //     key: Key('sendToken' + idx.toString()),
+                                                  //     child: Row(
+                                                  //       children: [
+                                                  //         Row(
+                                                  //           children: [
+                                                  //             Container(
+                                                  //               padding: EdgeInsets.all(11),
+                                                  //               // child: Icon(transactions[index].isSent ? Icons.upload_sharp : Icons.download_sharp, size: 26, color: color.btnPrimaryColor),
+                                                  //               child: Image.asset('assets/images/scan.png'),
+                                                  //               decoration: BoxDecoration(
+                                                  //                   color: color.white,
+                                                  //                   borderRadius: BorderRadius.circular(30)
+                                                  //               ),
+                                                  //             ),
+                                                  //             Text('QR SCAN', style: TextStyle(color: color.foreColor, fontSize: 14, fontFamily: Strings.fMedium)),
+                                                  //           ],
+                                                  //         ),
+                                                  //       ],
+                                                  //     ),
+                                                  //     onPressed: () async{
+                                                  //       Get.back();
+                                                  //       String result = await Navigator.push(context, MaterialPageRoute(builder: (context)=> QRCodeReaderPage()));
+                                                  //       List<String> splits = result.split(':');
+                                                  //       if(splits.length != 3 || !isNumeric(splits[2]) || !Strings.Address_Reg.hasMatch(splits[1])){
+                                                  //         Get.snackbar('QRCode Format Error'.tr, result,
+                                                  //             colorText: color.foreColor,
+                                                  //             backgroundColor: color.btnSecondaryColor,
+                                                  //             isDismissible: true
+                                                  //         );
+                                                  //         return;
+                                                  //       }
+                                                  //
+                                                  //       for(var i = 0; i < context.read<TokenProvider>().allTokens.length; i ++){
+                                                  //         if(splits[0] == context.read<TokenProvider>().allTokens[i].tokenId){
+                                                  //           context.read<TokenProvider>().changeNetwork(context.read<TokenProvider>().allTokens[i].chainId);
+                                                  //           break;
+                                                  //         }
+                                                  //       }
+                                                  //       for(var i = 0; i < context.read<TokenProvider>().tokens.length; i ++){
+                                                  //         if(splits[0] == context.read<TokenProvider>().tokens[i].tokenId){
+                                                  //           context.read<ParamsProvider>().setTokenId(i);
+                                                  //           context.read<ParamsProvider>().setReceiver(splits[1]);
+                                                  //           context.read<ParamsProvider>().setAmount(splits[2]);
+                                                  //           // Get.back();
+                                                  //           Get.toNamed(PageNames.transferForm);
+                                                  //           return;
+                                                  //         }
+                                                  //       }
+                                                  //
+                                                  //       Get.snackbar('Undefined Token'.tr, 'Please add token, first',
+                                                  //           colorText: color.foreColor,
+                                                  //           backgroundColor: color.btnSecondaryColor,
+                                                  //           isDismissible: true
+                                                  //       );
+                                                  //
+                                                  //     },
+                                                  //     style: OutlinedButton.styleFrom(
+                                                  //       onSurface: Colors.brown,
+                                                  //       primary: color.borderColor,
+                                                  //       side: BorderSide(color:  color.borderColor, width: 2),
+                                                  //       padding: EdgeInsets.only(top: 15, bottom: 15, left: 10, right: 10),
+                                                  //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+                                                  //       textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                                  //     ),
+                                                  //   ),
+                                                  // );
                                                   return ModalTokenItem(
                                                     url: context.read<TokenProvider>().allTokens[idx - 1].logo,
                                                     name: context.read<TokenProvider>().allTokens[idx - 1].name,
