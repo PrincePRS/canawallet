@@ -8,7 +8,6 @@ class Strings{
   static const String suffixChange = 'change-';
   static const String walletConnectServer = 'https://awesome-ramanujan-aec3f9.netlify.app/';
   static const String helpUrl = 'https://www.kingswap.io/about';
-  // static const String walletConnectServer = 'http://192.168.1.14:3000/';
   static const List<int> chainIds = [1, 56, 100];
   static const List<String> RPC_URL = [
     'https://mainnet.infura.io/v3/b623e2a5b3354e57b82abc22acd8db0f',
