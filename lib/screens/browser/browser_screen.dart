@@ -28,14 +28,7 @@ class _BrowserScreenState extends State<BrowserScreen> {
             Text('coming_soon'.tr, style: TextStyle(fontFamily: Strings.fBold, fontSize: 28, color: color.btnPrimaryColor)),
             SizedBox(height: 10),
             Text('Lorem Ipsum Dolor Sir Amet', style: TextStyle(fontFamily: Strings.fSemiBold, fontSize: 14, color: color.foreColor)),
-            Image.asset('assets/images/coming1.png'),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: List.generate(context.watch<TokenProvider>().log.length, (index) => Text(context.watch<TokenProvider>().log[index]))
-                ),
-              )
-            )
+            Image.asset('assets/images/coming1.png')
           ],
         ),
       )
