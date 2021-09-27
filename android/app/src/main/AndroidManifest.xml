@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.cancoin_wallet">
-   <application
+    package="com.cannawallet">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <application
         android:label="cancoin_wallet"
         android:icon="@mipmap/ic_launcher">
         <activity

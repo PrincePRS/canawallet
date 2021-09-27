@@ -1,3 +1,4 @@
+import 'package:cancoin_wallet/provider/token_provider.dart';
 import 'package:cancoin_wallet/screens/wallet/wallet_collect.dart';
 import 'package:cancoin_wallet/screens/wallet/wallet_finance.dart';
 import 'package:cancoin_wallet/screens/wallet/wallet_tokens.dart';
@@ -6,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cancoin_wallet/constants/strings.dart';
 import 'package:cancoin_wallet/global.dart';
-
+import 'package:provider/provider.dart';
 
 class WalletScreen extends StatefulWidget {
   const WalletScreen({Key? key}) : super(key: key);
@@ -70,6 +71,7 @@ class _WalletScreenState extends State<WalletScreen> {
                   ),
                 ],
               ),
+              Text(context.watch<TokenProvider>().counter.toString()),
               SizedBox(height: 20),
               btnState == 0 ? WalletToken() : ( btnState == 1 ? WalletFinance() : WalletCollect())
             ],

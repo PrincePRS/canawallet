@@ -233,7 +233,7 @@ class _SendTokenScreenState extends State<SendTokenScreen> with TickerProviderSt
                                                   Text(transactions[index].isSent ?  'To: ' : 'From: ', overflow: TextOverflow.ellipsis, style: TextStyle(color: color.contrastTextColor, fontSize: 12, fontFamily: Strings.fRegular)),
                                                   Expanded(
                                                     child: Container(
-                                                        child: Text(this.transactions[index].receiver, overflow: TextOverflow.ellipsis, style: TextStyle(color: color.contrastTextColor, fontSize: 14))
+                                                      child: Text(this.transactions[index].receiver, overflow: TextOverflow.ellipsis, style: TextStyle(color: color.contrastTextColor, fontSize: 14))
                                                     ),
                                                   ),
                                                 ],

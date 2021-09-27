@@ -1,4 +1,4 @@
-package com.example.cancoin_wallet
+package com.cannawallet
 
 import io.flutter.embedding.android.FlutterActivity
 

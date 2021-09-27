@@ -85,7 +85,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
     List<TokenInfo> tokens = await sqliteController.getTokenList();
     context.read<TokenProvider>().setAllTokens(tokens);
 
-    //
     int? chain = storageController.instance!.getInt('network');
     if(chain == null){
       storageController.instance!.setInt('network', 0);

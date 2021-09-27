@@ -6,15 +6,12 @@ import 'package:cancoin_wallet/constants/strings.dart';
 import 'package:cancoin_wallet/global.dart';
 import 'package:cancoin_wallet/provider/params_controller.dart';
 import 'package:cancoin_wallet/provider/token_provider.dart';
-import 'package:cancoin_wallet/screens/qrreader_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-
 class WalletToken extends StatefulWidget {
   const WalletToken({Key? key}) : super(key: key);
-
   @override
   _WalletTokenState createState() => _WalletTokenState();
 }
@@ -40,7 +37,7 @@ class _WalletTokenState extends State<WalletToken> {
           Text("My Wallet", style: TextStyle(color: color.foreColor, fontSize: 16, fontFamily: Strings.fSemiBold)),
           SizedBox(height: 10),
           OutlinedButton(
-            onPressed: ()async {
+            onPressed: () async {
               Get.defaultDialog(
                 backgroundColor: color.isDarkMode ? color.btnSecondaryColor : color.white,
                 title: '', // 'select_network'.tr,
@@ -322,10 +319,10 @@ class _WalletTokenState extends State<WalletToken> {
             ),
           ),
           Container(
-              padding: EdgeInsets.only(left: Get.width * 0.05, right: Get.width * 0.05, top: 15),
-              alignment: Alignment.centerLeft,
-              color: color.contrastColor,
-              child: Text('My Wallet', style: TextStyle(color: color.lightTextColor, fontFamily: Strings.fSemiBold, fontSize: 14))
+            padding: EdgeInsets.only(left: Get.width * 0.05, right: Get.width * 0.05, top: 15),
+            alignment: Alignment.centerLeft,
+            color: color.contrastColor,
+            child: Text('My Wallet', style: TextStyle(color: color.lightTextColor, fontFamily: Strings.fSemiBold, fontSize: 14))
           ),
           Expanded(
             child: context.watch<TokenProvider>().tokens.length == 0 ? Container(color: color.contrastColor, child: CircularProgressIndicator())

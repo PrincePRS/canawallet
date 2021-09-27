@@ -2,7 +2,6 @@ import 'package:cancoin_wallet/screens/browser/browser_screen.dart';
 import 'package:cancoin_wallet/screens/notify/notify_screen.dart';
 import 'package:cancoin_wallet/screens/setting/setting_screen.dart';
 import 'package:cancoin_wallet/screens/wallet/wallet_screen.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -34,14 +33,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
-          icon: Icon(LineIcons.layerGroup, size: 30),
-          title: "Home",
-          textStyle: TextStyle(fontSize: 16, fontFamily: Strings.fSemiBold),
-          activeColorPrimary: color.btnPrimaryColor,
-          activeColorSecondary: Colors.white,
-          inactiveColorPrimary: color.lightTextColor,
-          inactiveColorSecondary: Colors.purple,
-
+        icon: Icon(LineIcons.layerGroup, size: 30),
+        title: "Home",
+        textStyle: TextStyle(fontSize: 16, fontFamily: Strings.fSemiBold),
+        activeColorPrimary: color.btnPrimaryColor,
+        activeColorSecondary: Colors.white,
+        inactiveColorPrimary: color.lightTextColor,
+        inactiveColorSecondary: Colors.purple,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(LineIcons.alternateExternalLink, size: 30),
@@ -100,34 +98,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
           margin: EdgeInsets.all(0.0),
           popActionScreens: PopActionScreensType.all,
           bottomScreenMargin: 70.0,
-          onWillPop: (context) async {
-            await showDialog(
-              context: context!,
-              useSafeArea: true,
-              builder: (context) => Container(
-                height: 50.0,
-                width: 50.0,
-                color: Colors.white,
-                child: ElevatedButton(
-                  child: Text("Close"),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-            );
-            return false;
-          },
           selectedTabScreenContext: (context) {},
           hideNavigationBar: _hideNavBar,
           decoration: NavBarDecoration(
-              colorBehindNavBar: Colors.indigo,
-              borderRadius: BorderRadius.circular(0.0)
+            colorBehindNavBar: Colors.indigo,
+            borderRadius: BorderRadius.circular(0.0)
           ),
           popAllScreensOnTapOfSelectedTab: true,
           itemAnimationProperties: ItemAnimationProperties(
-              duration: Duration(milliseconds: 50),
-              curve: Curves.decelerate
+            duration: Duration(milliseconds: 50),
+            curve: Curves.decelerate
           ),
           screenTransitionAnimation: ScreenTransitionAnimation(
             animateTabTransition: true,
@@ -138,6 +118,5 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       );
     });
-
   }
 }

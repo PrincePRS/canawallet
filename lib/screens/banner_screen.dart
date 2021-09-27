@@ -1,4 +1,6 @@
+import 'package:cancoin_wallet/component/common_button.dart';
 import 'package:cancoin_wallet/constants/strings.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swipper/flutter_card_swiper.dart'; 
 import 'package:get/get.dart';
@@ -25,38 +27,35 @@ class _BoardScreenState extends State<BoardScreen> {
     if(lang == null) {
       Get.defaultDialog(
         backgroundColor: color.btnSecondaryColor,
-        title: "Select Language",
-        titleStyle: TextStyle(color: color.foreColor),
+        title: '',
+        titleStyle: TextStyle(fontSize: 0),
         barrierDismissible: false,
+        radius: 7,
         content: Padding(
           padding: EdgeInsets.symmetric(horizontal: Get.width * 0.03, vertical: 8),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              ElevatedButton(
-                child:  Text('English'),
+              Text('Select Language'.tr, textAlign: TextAlign.center, style: TextStyle(color: color.foreColor, fontFamily: Strings.fSemiBold, fontSize: 18)),
+              SizedBox(height: 30),
+              PrimaryButton(
+                title: 'English',
+                isActive: true,
                 onPressed: () {
                   LocalizationController().changeLocale('English');
                   storageController.instance!.setString('lang', 'English');
                   Get.back();
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: color.foreColor,
-                  padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                ),
+                }
               ),
-              ElevatedButton(
-                child:  Text('汉语'),
+              SizedBox(height: 10),
+              PrimaryButton(
+                title: '汉语',
+                isActive: true,
                 onPressed: () {
                   LocalizationController().changeLocale('Chinese');
                   storageController.instance!.setString('lang', 'Chinese');
                   Get.back();
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: color.foreColor,
-                  padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                ),
+                }
               ),
             ],
           )
@@ -164,10 +163,7 @@ class _BoardScreenState extends State<BoardScreen> {
                       ],
                     ),
                   ),
-                Container(
-                    color: color.contrastColor,
-                  height: Get.height * 0.12,
-                )
+                Container(color: color.contrastColor, height: Get.height * 0.12)
               ],
             );
           },

@@ -18,6 +18,8 @@ class TokenProvider extends ChangeNotifier{
   int _setId = 0;
   int _network = 0; // used in add custom tokens
   Timer? _timer;
+  int _counter = 0;
+  List<String> _log = [];
 
   int get setId => _setId;
   double get totalBalance => _totalBalance;
@@ -25,6 +27,8 @@ class TokenProvider extends ChangeNotifier{
   List<TokenInfo> get allTokens => _allTokens;
   int get network => _network;
   int get curNetwork => _curNetwork;
+  int get counter => _counter;
+  List<String> get log => _log;
 
   TokenProvider(){
     // initValues();
@@ -49,6 +53,8 @@ class TokenProvider extends ChangeNotifier{
   startTimer(){
     _timer = Timer.periodic(new Duration(seconds: 30), (timer){
       this.getBalance();
+      _counter ++;
+      notifyListeners();
     });
   }
 
@@ -132,22 +138,32 @@ class TokenProvider extends ChangeNotifier{
       this._tokens[i].balance = storageController.instance!.getDouble(Strings.suffixAmount + this._tokens[i].name)!;
     }
     double tp = 0;
-    for(var i = 0; i < this._tokens.length; i ++) {
-      if(this._tokens[i].address == ''){
-        EtherAmount am = await web3Controller.getBalance();
-        tp = BigInt.from(am.getInWei / BigInt.from(10).pow(14)).toDouble();
+    log.add('-----------------------1');
+    try{
+      for(var i = 0; i < this._tokens.length; i ++) {
+        if(this._tokens[i].address == ''){
+          log.add('=====   1');
+          EtherAmount am = await web3Controller.getBalance();
+          log.add('=====   11');
+          tp = BigInt.from(am.getInWei / BigInt.from(10).pow(14)).toDouble();
+          tp = tp / 10000.0;
+          storageController.instance!.setDouble(Strings.suffixAmount + this._tokens[i].name, tp);
+          this._tokens[i].balance = storageController.instance!.getDouble(Strings.suffixAmount + this._tokens[i].name)!;
+          continue;
+        }
+        log.add('=====   2');
+        BigInt b = await web3Controller.getTokenBalance(this._tokens[i].address);
+        log.add('=====   22');
+        tp = BigInt.from(b / BigInt.from(10).pow(14)).toDouble();
         tp = tp / 10000.0;
         storageController.instance!.setDouble(Strings.suffixAmount + this._tokens[i].name, tp);
         this._tokens[i].balance = storageController.instance!.getDouble(Strings.suffixAmount + this._tokens[i].name)!;
-        continue;
       }
-      BigInt b = await web3Controller.getTokenBalance(this._tokens[i].address);
-      tp = BigInt.from(b / BigInt.from(10).pow(14)).toDouble();
-      tp = tp / 10000.0;
-      storageController.instance!.setDouble(Strings.suffixAmount + this._tokens[i].name, tp);
-      this._tokens[i].balance = storageController.instance!.getDouble(Strings.suffixAmount + this._tokens[i].name)!;
+    }catch(e){
+      log.add('exception :  ' + e.toString());
     }
-    notifyListeners();
+
+    // notifyListeners();
 
     double price = 0;
     double change = 0;
@@ -155,7 +171,7 @@ class TokenProvider extends ChangeNotifier{
     for(var i = 0; i < this._tokens.length; i ++) {
       if(this._tokens[i].address != '') contracts.add(this._tokens[i].address);
     }
-
+    log.add('----------------------------2');
     for(var i = 0; i < this._tokens.length; i ++) {
       if(storageController.instance!.getDouble(Strings.suffixPrice + this._tokens[i].name) == null){
         storageController.instance!.setDouble(Strings.suffixPrice + this._tokens[i].name, 0.0);
@@ -169,11 +185,12 @@ class TokenProvider extends ChangeNotifier{
     }
 
     if(_curNetwork == 2) return;
+    log.add('----------------------------3');
     CoinGeckoResult<List<SimpleToken>> result = await coinGeckoApi.simpleTokenPrice(id: Chains.chains[_curNetwork].name, contractAddresses: contracts, vs_currencies: ['usd'], include24hChange: true);
     result.data.forEach((element) {
       for(var i = 0; i < this._tokens.length; i ++){
         if(this._tokens[i].address.toUpperCase() == element.contractAddress.toUpperCase()) {
-          price = double.parse(element.data['usd']!.toStringAsFixed(2));
+          price  = double.parse(element.data['usd']!.toStringAsFixed(2));
           change = double.parse(element.data['usd_24h_change']!.toStringAsFixed(2));
           storageController.instance!.setDouble(Strings.suffixPrice + this._tokens[i].name, price);
           storageController.instance!.setDouble(Strings.suffixChange + this._tokens[i].name, change);
@@ -189,7 +206,10 @@ class TokenProvider extends ChangeNotifier{
     }
 
     CoinGeckoResult<List<PricedCoin>> res = await coinGeckoApi.simplePrice(ids: ids, vs_currencies: ['usd'], include24hChange: true);
+    log.add('coingecko-----  ' + res.data.length.toString());
+
     res.data.forEach((element) {
+      log.add('token-----  ' + element.coinData!.id);
       for(var i = 0; i < this._tokens.length; i ++) {
         if(this._tokens[i].address == '' && this._tokens[i].tokenId.toUpperCase() == element.coinData!.id.toUpperCase()) {
           price  = double.parse(element.data['usd']!.toStringAsFixed(2));
@@ -203,11 +223,12 @@ class TokenProvider extends ChangeNotifier{
     });
 
     double value = 0;
+
     for(var i = 0; i < this._tokens.length; i ++){
       value += storageController.instance!.getDouble(Strings.suffixAmount + this._tokens[i].name)! * storageController.instance!.getDouble(Strings.suffixPrice + this._tokens[i].name)!;
     }
-    this.setTotalBalance(double.parse(value.toStringAsFixed(2)));
 
+    this.setTotalBalance(double.parse(value.toStringAsFixed(2)));
     notifyListeners();
   }
   
