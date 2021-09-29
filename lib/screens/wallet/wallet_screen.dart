@@ -63,11 +63,11 @@ class _WalletScreenState extends State<WalletScreen> {
                           padding: EdgeInsets.symmetric( horizontal: 10),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                           elevation: 0
-                        ),
+                        )
                       ))
                     )
-                  ),
-                ],
+                  )
+                ]
               ),
               SizedBox(height: 20),
               btnState == 0 ? WalletToken() : ( btnState == 1 ? WalletFinance() : WalletCollect())

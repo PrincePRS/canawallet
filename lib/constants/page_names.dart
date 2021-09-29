@@ -23,6 +23,7 @@ class PageNames{
   static const String signTx = '/signTx';
   static const String tokenList = '/tokenList';
   static const String walletconnect = '/walletconnect';
+  static const String buy = '/buy';
   static const String txInfo = '/txInfo';
   static const String walletAccount = '/walletAccount';
 }

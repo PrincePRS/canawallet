@@ -1,4 +1,5 @@
 import 'package:cancoin_wallet/screens/setting/account_screen.dart';
+import 'package:cancoin_wallet/screens/wallet/buy_screen.dart';
 import 'package:flutter/material.dart' hide Router;
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -90,7 +91,8 @@ class _MyAppState extends State<MyApp> {
           GetPage(name: PageNames.removePinCode, page: () => RemovePasswordScreen()),
           GetPage(name: PageNames.signTx, page: () => SignTransactionScreen()),
           GetPage(name: PageNames.tokenList, page: () => TokenListScreen()),
-          GetPage(name: PageNames.walletconnect, page: () => WalletConnectScrren()),
+          GetPage(name: PageNames.walletconnect, page: () => WalletConnectScreen()),
+          GetPage(name: PageNames.buy, page: () => BuyScreen()),
           GetPage(name: PageNames.txInfo, page: () => TransactionScreen()),
           GetPage(name: PageNames.walletAccount, page: () => AccountScreen())
         ],

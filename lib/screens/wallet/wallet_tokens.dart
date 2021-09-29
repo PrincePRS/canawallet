@@ -275,13 +275,13 @@ class _WalletTokenState extends State<WalletToken> {
                                                 }
                                                 Get.back();
                                                 Get.toNamed(PageNames.receive);
-                                              },
+                                              }
                                             );
                                           })
                                         )
                                       )
-                                    ),
-                                  ],
+                                    )
+                                  ]
                                 )
                               )
                             );
@@ -303,10 +303,12 @@ class _WalletTokenState extends State<WalletToken> {
                       child: Material(
                         color: color.btnPrimaryColor,
                         child: InkWell(
-                          onTap: (){},
+                          onTap: (){
+                            Get.toNamed(PageNames.buy);
+                          },
                           child: Padding(
                             padding: const EdgeInsets.all(10),
-                            child: Image.asset('assets/images/buy-icon.png'),
+                            child: Image.asset('assets/images/buy-icon.png')
                           ),
                         ),
                       ),
@@ -377,8 +379,8 @@ class _WalletTokenState extends State<WalletToken> {
                               style: TextStyle(color: color.isDarkMode ? color.foreColor : color.foreColor, fontSize: 18, fontFamily: Strings.fSemiBold),
                               textAlign: TextAlign.right,
                             )
-                          ),
-                        ],
+                          )
+                        ]
                       ),
                       style: OutlinedButton.styleFrom(
                         padding: EdgeInsets.symmetric(vertical: 10),
@@ -393,8 +395,8 @@ class _WalletTokenState extends State<WalletToken> {
               ),
             )
           )
-        ],
-      ),
+        ]
+      )
     );
   }
 }

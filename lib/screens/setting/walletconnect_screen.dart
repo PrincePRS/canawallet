@@ -9,14 +9,14 @@ import 'dart:convert';
 import 'package:provider/provider.dart';
 
 
-class WalletConnectScrren extends StatefulWidget {
-  const WalletConnectScrren({Key? key}) : super(key: key);
+class WalletConnectScreen extends StatefulWidget {
+  const WalletConnectScreen({Key? key}) : super(key: key);
 
   @override
-  _WalletConnectScrrenState createState() => _WalletConnectScrrenState();
+  _WalletConnectScreenState createState() => _WalletConnectScreenState();
 }
 
-class _WalletConnectScrrenState extends State<WalletConnectScrren> {
+class _WalletConnectScreenState extends State<WalletConnectScreen> {
 
   final Completer<WebViewController> _controller =   Completer<WebViewController>();
   int percent = 0;
@@ -47,13 +47,14 @@ class _WalletConnectScrrenState extends State<WalletConnectScrren> {
     return Scaffold(
       appBar: AppBar(
         title: Text('walletconnect'.tr),
-        backgroundColor: color.backColor,
+        backgroundColor: color.btnPrimaryColor,
         elevation: 0,
       ),
       body: Column(
         children: [
           LinearProgressIndicator(
             backgroundColor: color.backColor,
+            color: color.btnPrimaryColor,
             value: this.percent / 100.0,
           ),
           Expanded(

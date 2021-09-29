@@ -14,17 +14,21 @@ class Strings{
     'https://bsc-dataseed.binance.org/',
     'https://rpc.xdaichain.com/'
   ];
+
   static const List<String> WS_URL = [
     'wss://mainnet.infura.io/ws/v3/b623e2a5b3354e57b82abc22acd8db0f',
     'wss://mainnet.infura.io/ws/v3/b623e2a5b3354e57b82abc22acd8db0f',
     'wss://rpc.xdaichain.com/wss'
   ];
+
   static RegExp Address_Reg = RegExp(r'^(0x)?[0-9a-f]{40}', caseSensitive: false);
+
   static const List<String> explorers = [
     'https://api.etherscan.io/api?apikey=UKJGZVFK7XNHM5ZCEEBWCQTG8CHVDFVM1U&',
     'https://api.bscscan.com/api?apikey=BUDZP4K9UWNQT1625NTTYH2TM32RCIEGHW&',
     'https://blockscout.com/xdai/mainnet/api?'
   ];
+
   static const txUrls = [
     'https://etherscan.io/tx/',
     'https://bscscan.com/tx/',

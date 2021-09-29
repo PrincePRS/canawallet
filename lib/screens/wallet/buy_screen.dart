@@ -36,13 +36,14 @@ class _BuyScreenState extends State<BuyScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('SWAP'),
-        backgroundColor: color.backColor,
+        backgroundColor: color.btnPrimaryColor,
         elevation: 0,
       ),
       body: Column(
         children: [
           LinearProgressIndicator(
             backgroundColor: color.backColor,
+            color: color.btnPrimaryColor,
             value: this.percent / 100.0,
           ),
           Expanded(
