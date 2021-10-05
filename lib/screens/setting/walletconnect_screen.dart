@@ -65,8 +65,6 @@ class _WalletConnectScreenState extends State<WalletConnectScreen> {
               javascriptChannels: <JavascriptChannel>[
                 _walletconnectJavascriptChannel(context),
                 JavascriptChannel(name: 'Print', onMessageReceived: (JavascriptMessage msg) {
-                  print('--------------------');
-                  print(msg.message);
                   if(msg.message == 'connect'){
                     context.read<ParamsProvider>().setWalletConnect(true);
                   }else{

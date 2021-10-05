@@ -91,8 +91,6 @@ class _VerifyPhraseScreenState extends State<VerifyPhraseScreen> {
                                   setState(() {
                                     this.words.add(this.orders[index]);
                                     this.orders.removeAt(index);
-                                    print(orders.length );
-                                    print(patterns.length );
                                     this.isCheck = false;
                                   });
                                 },

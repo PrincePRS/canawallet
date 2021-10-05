@@ -44,7 +44,6 @@ class _TokenListScreenState extends State<TokenListScreen> with TickerProviderSt
     try{
       if(context.read<TokenProvider>().network == 2){
         Response res = await connectController.getXTokenInfo(_addressController.text);
-        print(res.statusCode);
         if(res.statusCode == 200){
           setState(() {
             var result = res.body;
