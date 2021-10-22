@@ -39,7 +39,7 @@ class _WalletCollectState extends State<WalletCollect> {
           children: [
             Text('coming_soon'.tr, style: TextStyle(fontFamily: Strings.fBold, fontSize: 28, color: color.btnPrimaryColor)),
             SizedBox(height: 10),
-            Text('Lorem Ipsum Dolor Sir Amet', style: TextStyle(fontFamily: Strings.fSemiBold, fontSize: 14, color: color.foreColor)),
+            Text('Are you tired of having issues viewing your prized NFTs with other wallets? \nWith The CANNA wallet, users can view and safely store their NFTs with confidence.',  style: TextStyle(fontFamily: Strings.fSemiBold, fontSize: 14, color: color.foreColor)),
             Image.asset('assets/images/coming2.png')
           ],
         ),

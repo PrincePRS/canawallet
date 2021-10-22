@@ -305,6 +305,7 @@ class _WalletTokenState extends State<WalletToken> {
                         child: InkWell(
                           onTap: (){
                             Get.toNamed(PageNames.buy);
+
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(10),

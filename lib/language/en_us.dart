@@ -62,7 +62,7 @@ const Map<String, String> en = {
   'cancel': 'Cancel',
   'security': 'Security',
   'join_community' : 'Join Community',
-  'help_center' : 'Help Center',
+  'help_center' : 'Help Centre',
   'walletconnect': 'WalletConnect',
   'pincode' : 'Pin Code',
   'enter_passcode': 'Enter your passcode',

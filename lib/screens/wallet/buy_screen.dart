@@ -1,3 +1,4 @@
+import 'package:cancoin_wallet/provider/token_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cancoin_wallet/global.dart';
@@ -48,7 +49,7 @@ class _BuyScreenState extends State<BuyScreen> {
           ),
           Expanded(
             child: WebView(
-              initialUrl: 'https://app2.kingswap.exchange/#/swap',
+              initialUrl: context.watch<TokenProvider>().curNetwork == 1 ? 'https://pancakeswap.finance/swap' : 'https://app2.kingswap.exchange/#/swap' ,
               javascriptMode: JavascriptMode.unrestricted,
               onProgress: (val){
                 setState(() {

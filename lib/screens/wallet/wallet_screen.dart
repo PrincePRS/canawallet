@@ -16,7 +16,7 @@ class WalletScreen extends StatefulWidget {
 class _WalletScreenState extends State<WalletScreen> {
   int btnState = 0;
 
-  List<String> tokensTaps = ['Tokens', 'Finance', 'Collectibles'];
+  List<String> tokensTaps = ['Tokens', 'Collectibles'];
 
   @override
   void initState() {
@@ -51,7 +51,7 @@ class _WalletScreenState extends State<WalletScreen> {
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: List.generate(3 , (index) => ElevatedButton(
+                      children: List.generate(2 , (index) => ElevatedButton(
                         child:  Text(tokensTaps[index], style: TextStyle(fontFamily: Strings.fSemiBold, fontSize: 14, color: (index == this.btnState) ? color.backColor : color.contrastTextColor,)),
                         onPressed: () {
                           setState(() {
@@ -70,7 +70,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 ]
               ),
               SizedBox(height: 20),
-              btnState == 0 ? WalletToken() : ( btnState == 1 ? WalletFinance() : WalletCollect())
+              btnState == 0 ? WalletToken() : WalletCollect()
             ],
           ),
         )
