@@ -62,7 +62,7 @@ class _WalletScreenState extends State<WalletScreen> {
                             },
                             style: ElevatedButton.styleFrom(
                               primary:  (index == this.btnState) ? color.btnPrimaryColor : color.backColor,
-                              padding: EdgeInsets.symmetric( horizontal: 10),
+                              padding: EdgeInsets.symmetric( horizontal: 15),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                               elevation: 0
                             )
