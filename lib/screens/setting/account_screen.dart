@@ -20,7 +20,7 @@ class _AccountScreenState extends State<AccountScreen> {
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage("assets/images/background.png"),
-              fit: BoxFit.fitHeight,
+              fit: BoxFit.fitHeight
             ),
           ),
           child: Column(
@@ -40,10 +40,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: Get.height * 0.02),
-                child: Text('join_community'.tr, style: TextStyle(fontSize: 14, fontFamily: Strings.fSemiBold, color: color.contrastTextColor)),
-              ),
+              SizedBox(height: 20),
               OutlinedButton(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

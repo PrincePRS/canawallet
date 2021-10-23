@@ -61,7 +61,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       PersistentBottomNavBarItem(
         icon: Icon(LineIcons.bell, size: 30),
-        title: ("Notify"),
+        title: ("Notification"),
         textStyle: TextStyle(fontSize: 16, fontFamily: Strings.fSemiBold),
         activeColorPrimary: color.btnPrimaryColor,
         inactiveColorPrimary: color.lightTextColor,

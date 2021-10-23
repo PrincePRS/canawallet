@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:cancoin_wallet/constants/page_names.dart';
 import 'package:cancoin_wallet/constants/strings.dart';
 import 'package:cancoin_wallet/controller/Localization_Controller.dart';
-import 'package:cancoin_wallet/controller/storageController.dart';
 import 'package:cancoin_wallet/provider/params_controller.dart';
 import 'package:cancoin_wallet/provider/token_provider.dart';
 import 'package:cancoin_wallet/screens/banner_screen.dart';

@@ -52,13 +52,13 @@ class _WalletTokenState extends State<WalletToken> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('select_network'.tr, style: TextStyle(color: color.foreColor, fontFamily: Strings.fSemiBold, fontSize: 18)),
-                          GestureDetector(
-                            onTap: (){
-                              Get.back();
-                              Get.toNamed(PageNames.tokenList);
-                            },
-                            child: Image.asset('assets/images/tokens.png'),
-                          )
+                          // GestureDetector(
+                          //   onTap: (){
+                          //     Get.back();
+                          //     Get.toNamed(PageNames.tokenList);
+                          //   },
+                          //   child: Image.asset('assets/images/tokens.png'),
+                          // )
                         ],
                       ),
                       SizedBox(height: 10),

@@ -111,10 +111,10 @@ class _SettingScreenState extends State<SettingScreen> {
                       Get.toNamed(PageNames.theme);
                     },
                     style: ElevatedButton.styleFrom(
-                        primary: color.white,
-                        side: BorderSide(color: color.borderColor, width: 3),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
-                        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15)
+                      primary: color.white,
+                      side: BorderSide(color: color.borderColor, width: 3),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
+                      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15)
                     ),
                   ),
                 ),
@@ -129,10 +129,10 @@ class _SettingScreenState extends State<SettingScreen> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(9.0),
                               child: Image.asset(
-                                  'assets/images/language-icon.png',
-                                  fit: BoxFit.cover,
-                                  width: 35,
-                                  height: 35
+                                'assets/images/language-icon.png',
+                                fit: BoxFit.cover,
+                                width: 35,
+                                height: 35
                               ),
                             ),
                             SizedBox(width: 15),
@@ -146,10 +146,10 @@ class _SettingScreenState extends State<SettingScreen> {
                       Get.toNamed(PageNames.language);
                     },
                     style: ElevatedButton.styleFrom(
-                        primary: color.white,
-                        side: BorderSide(color: color.borderColor, width: 3),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
-                        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15)
+                      primary: color.white,
+                      side: BorderSide(color: color.borderColor, width: 3),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
+                      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15)
                     ),
                   ),
                 ),
@@ -161,10 +161,10 @@ class _SettingScreenState extends State<SettingScreen> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(9.0),
                           child: Image.asset(
-                              'assets/images/security-icon.png',
-                              fit: BoxFit.cover,
-                              width: 35,
-                              height: 35
+                            'assets/images/security-icon.png',
+                            fit: BoxFit.cover,
+                            width: 35,
+                            height: 35
                           ),
                         ),
                         SizedBox(width: 15),
@@ -188,10 +188,10 @@ class _SettingScreenState extends State<SettingScreen> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(9.0),
                               child: Image.asset(
-                                  'assets/images/walletconnect-icon.png',
-                                  fit: BoxFit.cover,
-                                  width: 35,
-                                  height: 35
+                                'assets/images/walletconnect-icon.png',
+                                fit: BoxFit.cover,
+                                width: 35,
+                                height: 35
                               ),
                             ),
                             SizedBox(width: 15),
@@ -228,10 +228,10 @@ class _SettingScreenState extends State<SettingScreen> {
                       Get.toNamed(PageNames.walletconnect);
                     },
                     style: ElevatedButton.styleFrom(
-                        primary: color.white,
-                        side: BorderSide(color: color.borderColor, width: 3),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
-                        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15)
+                      primary: color.white,
+                      side: BorderSide(color: color.borderColor, width: 3),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
+                      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15)
                     )
                   ),
                 ),
@@ -255,10 +255,10 @@ class _SettingScreenState extends State<SettingScreen> {
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(9.0),
                                     child: Image.asset(
-                                        'assets/images/help-icon.png',
-                                        fit: BoxFit.cover,
-                                        width: 35,
-                                        height: 35
+                                      'assets/images/help-icon.png',
+                                      fit: BoxFit.cover,
+                                      width: 35,
+                                      height: 35
                                     ),
                                   ),
                                   SizedBox(width: 15),
@@ -272,10 +272,10 @@ class _SettingScreenState extends State<SettingScreen> {
                             await canLaunch(Strings.helpUrl) ? await launch(Strings.helpUrl) : throw 'Could not launch ';
                           },
                           style: ElevatedButton.styleFrom(
-                              primary: color.white,
-                              side: BorderSide(color: color.borderColor, width: 3),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
-                              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15)
+                            primary: color.white,
+                            side: BorderSide(color: color.borderColor, width: 3),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
+                            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15)
                           ),
                         ),
                       )
