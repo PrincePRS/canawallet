@@ -10,6 +10,7 @@ class TokenInfo {
   double change = 0;
   double balance = 0;
   bool isActive = false;
+  int state = 0;
 
   TokenInfo();
 
@@ -25,6 +26,7 @@ class TokenInfo {
     price = map['price'] == null ? 0 : map['price'];
     change = map['change'] == null ? 0 : map['change'];
     balance = map['balance'] == null ? 0 : map['balance'];
+    state = map['state'] == null ? 0 : map['state'];
   }
 
   Map<String, Object?> toMap() {
@@ -35,7 +37,8 @@ class TokenInfo {
       'symbol': symbol,
       'chainId' : chainId,
       'tokenId' : tokenId,
-      'isActive' : isActive ? 1 : 0
+      'isActive' : isActive ? 1 : 0,
+      'state' : state
     };
     if (id != -1) {
       map['id'] = id;
@@ -45,7 +48,7 @@ class TokenInfo {
 
   @override
   String toString() {
-    return 'AuthInfo{id: $id, logo : $logo, name : $name, address : $address, symbol : $symbol, tokenId: $tokenId, chainId : $chainId, isActive : $isActive}';
+    return 'TokenInfo{id: $id, logo : $logo, name : $name, address : $address, symbol : $symbol, tokenId: $tokenId, chainId : $chainId, isActive : $isActive, state: $state}';
   }
 
 

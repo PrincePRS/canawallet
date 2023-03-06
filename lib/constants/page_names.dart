@@ -26,4 +26,6 @@ class PageNames{
   static const String buy = '/buy';
   static const String txInfo = '/txInfo';
   static const String walletAccount = '/walletAccount';
+  static const String editAccount = '/editAccount';
+  static const String setNotification = '/setNotification';
 }

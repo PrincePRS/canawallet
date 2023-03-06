@@ -1,4 +1,8 @@
 import 'package:cancoin_wallet/constants/strings.dart';
+import 'package:cancoin_wallet/model/notification_info.dart';
+import 'package:cancoin_wallet/model/wallet_info.dart';
+import 'package:cancoin_wallet/provider/notification_provider.dart';
+import 'package:cancoin_wallet/provider/wallet_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cancoin_wallet/controller/Localization_Controller.dart';
@@ -37,7 +41,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
       });
       Credentials credentials = EthPrivateKey.fromHex(privateKey);
       credentials.extractAddress().then((value) {
-          web3Controller.setCredentials(privateKey);
+        web3Controller.setCredentials(privateKey);
       });
     }
 
@@ -60,30 +64,44 @@ class _LoadingScreenState extends State<LoadingScreen> {
     }
 
     // check pincode state
-
     String? code = storageController.instance!.getString('pinCode');
     if(code != null) {
       context.read<ParamsProvider>().setPinCode(code);
       context.read<ParamsProvider>().setNextPage(DashboardScreen());
-      // paramsController.setPinCode(code);
-      // paramsController.setNextPage(DashboardScreen());
     }
 
-    bool? askTransaction = storageController.instance!.getBool('askTransaction');
-    if(askTransaction != null) {
-      context.read<ParamsProvider>().setAskTransaction(askTransaction);
-      // paramsController.setAskTransaction(askTransaction);
-    }else {
-      context.read<ParamsProvider>().setAskTransaction(false);
-      // paramsController.setAskTransaction(false);
-      storageController.instance!.setBool('askTransaction', false);
+    bool? tAlert = storageController.instance!.getBool('transactionAlert');
+    if(tAlert != null) {
+      context.read<NotificationProvider>().toggleTransactionAlert();
+    } else {
+      storageController.instance!.setBool('transactionAlert', false);
+    }
+
+    bool? pAlert = storageController.instance!.getBool('priceAlert');
+    if(tAlert != null) {
+      context.read<NotificationProvider>().togglePriceAlert();
+    } else {
+      storageController.instance!.setBool('priceAlert', false);
+    }
+
+    double? limitValue = storageController.instance!.getDouble('limitValue');
+    if(limitValue != null) {
+      context.read<NotificationProvider>().setLimitValue(limitValue);
+    } else {
+      storageController.instance!.setDouble('limitValue', 0);
     }
 
     //  getTokens
-
     await sqliteController.open();
     List<TokenInfo> tokens = await sqliteController.getTokenList();
     context.read<TokenProvider>().setAllTokens(tokens);
+
+    List<WalletInfo> walelts = await sqliteController.getWalletList();
+    context.read<WalletProvider>().setWalletList(walelts);
+
+    List<NotificationInfo> alerts = await sqliteController.getNotificationList();
+    print('-------------------->>>>>>>>>>>' + alerts.length.toString());
+    context.read<TokenProvider>().setAlertList(alerts);
 
     int? chain = storageController.instance!.getInt('network');
     if(chain == null){

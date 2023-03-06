@@ -179,6 +179,30 @@ class _SettingScreenState extends State<SettingScreen> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 10, left: Get.width * 0.05, right: Get.width * 0.05),
+                  child: SettingItemButton(
+                    leftWidget: Row(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(9.0),
+                          child: Image.asset(
+                              'assets/images/bell-icon.png',
+                              fit: BoxFit.cover,
+                              width: 35,
+                              height: 35
+                          ),
+                        ),
+                        SizedBox(width: 15),
+                        Text('notification'.tr, style: TextStyle(color: color.foreColor, fontSize: 16, fontFamily: Strings.fSemiBold)),
+                      ],
+                    ),
+                    rightWidget: Icon(Icons.arrow_forward_ios_outlined, size: 26, color: color.isDarkMode ? color.foreColor : color.foreColor),
+                    onPressed: (){
+                      Get.toNamed(PageNames.setNotification);
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10, left: Get.width * 0.05, right: Get.width * 0.05),
                   child: OutlinedButton(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

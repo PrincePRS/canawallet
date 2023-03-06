@@ -1,4 +1,8 @@
+import 'package:cancoin_wallet/provider/notification_provider.dart';
+import 'package:cancoin_wallet/provider/wallet_provider.dart';
 import 'package:cancoin_wallet/screens/setting/account_screen.dart';
+import 'package:cancoin_wallet/screens/setting/edit_account_screen.dart';
+import 'package:cancoin_wallet/screens/setting/set_notification_screen.dart';
 import 'package:cancoin_wallet/screens/wallet/buy_screen.dart';
 import 'package:flutter/material.dart' hide Router;
 import 'package:flutter/services.dart';
@@ -61,7 +65,9 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<TokenProvider>(create: (context) => TokenProvider()),
-        ChangeNotifierProvider<ParamsProvider>(create: (context) => ParamsProvider())
+        ChangeNotifierProvider<WalletProvider>(create: (context) => WalletProvider()),
+        ChangeNotifierProvider<ParamsProvider>(create: (context) => ParamsProvider()),
+        ChangeNotifierProvider<NotificationProvider>(create: (context) => NotificationProvider())
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
@@ -93,7 +99,9 @@ class _MyAppState extends State<MyApp> {
           GetPage(name: PageNames.walletconnect, page: () => WalletConnectScreen()),
           GetPage(name: PageNames.buy, page: () => BuyScreen()),
           GetPage(name: PageNames.txInfo, page: () => TransactionScreen()),
-          GetPage(name: PageNames.walletAccount, page: () => AccountScreen())
+          GetPage(name: PageNames.walletAccount, page: () => AccountScreen()),
+          GetPage(name: PageNames.editAccount, page: () => EditAccountScreen()),
+          GetPage(name: PageNames.setNotification, page: () => SetNotificationScreen())
         ],
         locale: LocalizationController.locale,
         fallbackLocale: LocalizationController.fallbackLocale,

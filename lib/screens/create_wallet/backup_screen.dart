@@ -1,4 +1,6 @@
 import 'package:cancoin_wallet/constants/strings.dart';
+import 'package:cancoin_wallet/model/wallet_info.dart';
+import 'package:cancoin_wallet/provider/wallet_provider.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -373,6 +375,30 @@ class _BackupScreenState extends State<BackupScreen> {
                       await web3Controller.setCredentials(privateKey);
                       storageController.instance!.setString('privateKey', privateKey);
                       storageController.instance!.setString('accountAddress', accountAddress.toString());
+                      List<WalletInfo> wallets = context.read<WalletProvider>().wallets;
+                      for(int i = 0; i < wallets.length; i ++){
+                        if(wallets[i].privateKey == privateKey) break;
+                        if(i == wallets.length - 1){
+                          WalletInfo wallet = WalletInfo.fromMap({
+                            'name': 'My Wallet',
+                            'address': accountAddress.toString(),
+                            'privateKey': privateKey
+                          });
+                          await sqliteController.insertWalletData(wallet);
+                          print((await sqliteController.getWalletList()));
+                          context.read<WalletProvider>().addWallet(wallet);
+                        }
+                      }
+                      if(wallets.length == 0){
+                        WalletInfo wallet = WalletInfo.fromMap({
+                          'name': 'My Wallet',
+                          'address': accountAddress.toString(),
+                          'privateKey': privateKey
+                        });
+                        await sqliteController.insertWalletData(wallet);
+                        print('' + (await sqliteController.getWalletList()).toString());
+                        context.read<WalletProvider>().addWallet(wallet);
+                      }
                     }else{
                       Credentials credentials = EthPrivateKey.fromHex(this._privatekeyController.text);
                       EthereumAddress accountAddress = await credentials.extractAddress();
@@ -400,7 +426,7 @@ class _BackupScreenState extends State<BackupScreen> {
                   textStyle: TextStyle(fontSize: 15, fontFamily: Strings.fSemiBold)
                 ),
               ),
-            ),
+            )
           ],
         ),
       ),

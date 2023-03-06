@@ -1,6 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
-import 'package:cancoin_wallet/constants/strings.dart';
 import 'package:cancoin_wallet/model/transaction_info.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -16,6 +14,7 @@ class ParamsProvider extends ChangeNotifier {
   bool _connected = false;
   TransactionInfo _transaction = new TransactionInfo();
   bool _isActive = false;
+  int _editAccount = 0;
 
   int get selTokenId => _selTokenId;
   String get pinCode => _pinCode;
@@ -28,6 +27,7 @@ class ParamsProvider extends ChangeNotifier {
   bool get connected => _connected;
   TransactionInfo get transaction => _transaction;
   bool get isActive => _isActive;
+  int get editAccount => _editAccount;
 
   void setWalletConnectUrl(String uri){
     this._walletconnectUrl = uri;
@@ -81,6 +81,11 @@ class ParamsProvider extends ChangeNotifier {
 
   void setIsActive(bool f){
     _isActive = f;
+    notifyListeners();
+  }
+
+  void setEditAccount(int account){
+    _editAccount = account;
     notifyListeners();
   }
 }

@@ -1,4 +1,6 @@
 import 'package:cancoin_wallet/constants/strings.dart';
+import 'package:cancoin_wallet/model/wallet_info.dart';
+import 'package:cancoin_wallet/provider/wallet_provider.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -120,11 +122,11 @@ class _VerifyPhraseScreenState extends State<VerifyPhraseScreen> {
                             });
                           },
                           style: ElevatedButton.styleFrom(
-                              onSurface: Color(0x99000000),
-                              primary: Color(0x99000000),
-                              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                              textStyle: TextStyle(color: Colors.white, fontSize: 16, fontFamily: Strings.fSemiBold)
+                            onSurface: Color(0x99000000),
+                            primary: Color(0x99000000),
+                            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                            textStyle: TextStyle(color: Colors.white, fontSize: 16, fontFamily: Strings.fSemiBold)
                           ),
                         ),
                         SizedBox(width: Get.width * 0.05),
@@ -212,6 +214,19 @@ class _VerifyPhraseScreenState extends State<VerifyPhraseScreen> {
                     await web3Controller.setCredentials(privateKey);
                     storageController.instance!.setString('privateKey', privateKey);
                     storageController.instance!.setString('accountAddress', accountAddress.toString());
+                    List<WalletInfo> wallets = context.read<WalletProvider>().wallets;
+                    for(int i = 0; i < wallets.length; i ++){
+                      if(wallets[i].privateKey == privateKey) break;
+                      if(i == wallets.length - 1){
+                        WalletInfo wallet = WalletInfo.fromMap({
+                          'name': 'My Wallet',
+                          'address': accountAddress.toString(),
+                          'privateKey': privateKey
+                        });
+                        sqliteController.insertWalletData(wallet);
+                        context.read<WalletProvider>().addWallet(wallet);
+                      }
+                    }
                     context.read<TokenProvider>().changeNetwork(0);
                     setState(() { isLoading = false; });
                     Get.toNamed(PageNames.successwallet);

@@ -89,5 +89,7 @@ const Map<String, String> en = {
   'total_supply': 'Total Supply',
   'from': 'From',
   'to': 'To',
-  'confirm': 'Confirm'
+  'confirm': 'Confirm',
+  'notification': 'Notifications',
+  'transaction_complete': 'Transaction Completed'
 };

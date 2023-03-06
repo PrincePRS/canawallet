@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cancoin_wallet/model/notification_info.dart';
 import 'package:coingecko_dart/coingecko_dart.dart';
 import 'package:coingecko_dart/dataClasses/coins/PricedCoin.dart';
 import 'package:coingecko_dart/dataClasses/coins/SimpleToken.dart';
@@ -6,11 +7,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:cancoin_wallet/constants/chains.dart';
 import 'package:cancoin_wallet/constants/strings.dart';
 import 'package:cancoin_wallet/global.dart';
-import 'package:cancoin_wallet/language/cn_ch.dart';
 import 'package:cancoin_wallet/model/token_info.dart';
 import 'package:web3dart/web3dart.dart';
 
 class TokenProvider extends ChangeNotifier{
+  List<NotificationInfo> _alerts = [];
   List<TokenInfo> _allTokens = [];
   List<TokenInfo> _tokens = [];
   int _curNetwork = 0;
@@ -25,12 +26,13 @@ class TokenProvider extends ChangeNotifier{
   List<TokenInfo> get allTokens => _allTokens;
   int get network => _network;
   int get curNetwork => _curNetwork;
+  List<NotificationInfo> get alerts => _alerts;
 
   TokenProvider(){
     // initValues();
   }
 
-  initValues() async{
+  initValues() async {
     await sqliteController.open();
     List<TokenInfo> tokens = await sqliteController.getTokenList();
     this.setAllTokens(tokens);
@@ -69,10 +71,11 @@ class TokenProvider extends ChangeNotifier{
     _totalBalance = val;
   }
 
-  void getPriceInfo() async{
+  void getPriceInfo() async {
     double price = 0;
     double change = 0;
     List<String> contracts = [];
+
     for(var i = 0; i < this._tokens.length; i ++) {
       if(this._tokens[i].address != '') contracts.add(this._tokens[i].address);
     }
@@ -157,6 +160,7 @@ class TokenProvider extends ChangeNotifier{
     for(var i = 0; i < this._tokens.length; i ++) {
       if(this._tokens[i].address != '') contracts.add(this._tokens[i].address);
     }
+
     for(var i = 0; i < this._tokens.length; i ++) {
       if(storageController.instance!.getDouble(Strings.suffixPrice + this._tokens[i].name) == null){
         storageController.instance!.setDouble(Strings.suffixPrice + this._tokens[i].name, 0.0);
@@ -167,12 +171,47 @@ class TokenProvider extends ChangeNotifier{
         storageController.instance!.setDouble(Strings.suffixChange + this._tokens[i].name, 0.0);
       }
       this._tokens[i].change = storageController.instance!.getDouble(Strings.suffixChange + this._tokens[i].name)!;
+      DateTime now = DateTime.now();
+
+      if(storageController.instance!.getBool('priceAlert')!){
+        if(this._tokens[i].change > storageController.instance!.getDouble('limitValue')! && this._tokens[i].state < 1){
+          NotificationInfo info = NotificationInfo.fromMap({
+            'title': 'Increasing over +' + storageController.instance!.getDouble('limitValue')!.toString() + '%',
+            'logo': this._tokens[i].logo,
+            'time': now.year.toString() + '-' + (now.month + 1).toString() + '-' + now.day.toString() + ' ' + now.hour.toString() + ':' + now.minute.toString(),
+            'value': ''
+          });
+
+          int newid = await sqliteController.insertNotification(info);
+          info.id = newid;
+          this.addAlert(info);
+          this._tokens[i].state = 1;
+          sqliteController.updateTokenState(this._tokens[i]);
+        }
+        else if(this._tokens[i].change < -1 * storageController.instance!.getDouble('limitValue')! && this._tokens[i].state > -1){
+          NotificationInfo info = NotificationInfo.fromMap({
+            'title': 'Decreasing below -' + storageController.instance!.getDouble('limitValue')!.toString() + '%',
+            'logo': this._tokens[i].logo,
+            'time': now.year.toString() + '-' + (now.month + 1).toString() + '-' + now.day.toString() + ' ' + now.hour.toString() + ':' + now.minute.toString(),
+            'value': ''
+          });
+
+          int newid = await sqliteController.insertNotification(info);
+          info.id = newid;
+          this.addAlert(info);
+          this._tokens[i].state = -1;
+          sqliteController.updateTokenState(this._tokens[i]);
+        }
+        else if(this._tokens[i].change > -1 * storageController.instance!.getDouble('limitValue')! && this._tokens[i].change < storageController.instance!.getDouble('limitValue')!){
+          this._tokens[i].state = 0;
+        }
+      }
     }
 
     if(_curNetwork == 2) return;
     CoinGeckoResult<List<SimpleToken>> result = await coinGeckoApi.simpleTokenPrice(id: Chains.chains[_curNetwork].name, contractAddresses: contracts, vs_currencies: ['usd'], include24hChange: true);
-    result.data.forEach((element) {
-      for(var i = 0; i < this._tokens.length; i ++){
+    result.data.forEach((element) async{
+      for(var i = 0; i < this._tokens.length; i ++) {
         if(this._tokens[i].address.toUpperCase() == element.contractAddress.toUpperCase()) {
           price  = double.parse(element.data['usd']!.toStringAsFixed(2));
           change = double.parse(element.data['usd_24h_change']!.toStringAsFixed(2));
@@ -180,9 +219,42 @@ class TokenProvider extends ChangeNotifier{
           storageController.instance!.setDouble(Strings.suffixChange + this._tokens[i].name, change);
           this._tokens[i].price = storageController.instance!.getDouble(Strings.suffixPrice + this._tokens[i].name)!;
           this._tokens[i].change = storageController.instance!.getDouble(Strings.suffixChange + this._tokens[i].name)!;
+          DateTime now = DateTime.now();
+          if(storageController.instance!.getBool('priceAlert')!){
+            if(this._tokens[i].change > storageController.instance!.getDouble('limitValue')! && this._tokens[i].state < 1){
+              NotificationInfo info = NotificationInfo.fromMap({
+                'title': 'Increasing over +' + storageController.instance!.getDouble('limitValue')!.toString() + '%',
+                'logo': this._tokens[i].logo,
+                'time': now.year.toString() + '-' + (now.month + 1).toString() + '-' + now.day.toString() + ' ' + now.hour.toString() + ':' + now.minute.toString(),
+                'value': ''
+              });
+              int newid = await sqliteController.insertNotification(info);
+              info.id = newid;
+              this.addAlert(info);
+              this._tokens[i].state = 1;
+              sqliteController.updateTokenState(this._tokens[i]);
+            }
+            else if(this._tokens[i].change < -1 * storageController.instance!.getDouble('limitValue')! && this._tokens[i].state > -1){
+              NotificationInfo info = NotificationInfo.fromMap({
+                'title': 'Decreasing below -' + storageController.instance!.getDouble('limitValue')!.toString() + '%',
+                'logo': this._tokens[i].logo,
+                'time': now.year.toString() + '-' + (now.month + 1).toString() + '-' + now.day.toString() + ' ' + now.hour.toString() + ':' + now.minute.toString(),
+                'value': ''
+              });
+              int newid = await sqliteController.insertNotification(info);
+              info.id = newid;
+              this.addAlert(info);
+              this._tokens[i].state = -1;
+              sqliteController.updateTokenState(this._tokens[i]);
+            }
+            else if(this._tokens[i].change > -1 * storageController.instance!.getDouble('limitValue')! && this._tokens[i].change < storageController.instance!.getDouble('limitValue')!){
+              this._tokens[i].state = 0;
+            }
+          }
         }
       }
     });
+
 
     List<String> ids = [];
     for(var i = 0; i < this._tokens.length; i ++){
@@ -213,7 +285,15 @@ class TokenProvider extends ChangeNotifier{
     this.setTotalBalance(double.parse(value.toStringAsFixed(2)));
     notifyListeners();
   }
-  
+
+  void updateTokenStates(){
+    for(var i = 0; i < this._tokens.length; i ++){
+      this._tokens[i].state = 0;
+    }
+    sqliteController.updateAllState();
+    notifyListeners();
+  }
+
   void setAllTokens(List<TokenInfo> t) {
     _allTokens = t;
     notifyListeners();
@@ -237,7 +317,6 @@ class TokenProvider extends ChangeNotifier{
 
   void toggleActive(int id){
     _allTokens[id].isActive = !_allTokens[id].isActive;
-
     notifyListeners();
   }
 
@@ -265,6 +344,27 @@ class TokenProvider extends ChangeNotifier{
 
   void changeSetId(id){
     this._setId = id;
+    notifyListeners();
+  }
+
+
+  void setAlertList(List<NotificationInfo> lists){
+    _alerts = lists;
+    notifyListeners();
+  }
+
+  void addAlert(NotificationInfo a){
+    _alerts.add(a);
+    notifyListeners();
+  }
+
+  void deleteAlert(int id){
+    _alerts.removeAt(id);
+    notifyListeners();
+  }
+
+  void clearAlerts(){
+    _alerts.clear();
     notifyListeners();
   }
 }

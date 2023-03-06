@@ -2,12 +2,12 @@ class Strings{
   Strings._();
   static const String prod = 'prod';
   static const String dev = 'dev';
-  static const String APP_NAME = 'King wallet';
+  static const String APP_NAME = 'CANA Wallet';
   static const String suffixAmount = 'amount-';
   static const String suffixPrice = 'price-';
   static const String suffixChange = 'change-';
   static const String walletConnectServer = 'https://awesome-ramanujan-aec3f9.netlify.app/';
-  static const String helpUrl = 'https://www.kingswap.io/about';
+  static const String helpUrl = 'https://t.me/kingswap';
   static const List<int> chainIds = [1, 56, 100];
   static const List<String> RPC_URL = [
     'https://mainnet.infura.io/v3/b623e2a5b3354e57b82abc22acd8db0f',

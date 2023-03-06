@@ -1,4 +1,3 @@
-import 'package:bip32/bip32.dart';
 import 'package:cancoin_wallet/constants/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -100,12 +99,12 @@ class _RecoverScreenState extends State<RecoverScreen> {
                   padding: EdgeInsets.symmetric(vertical: 15),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                   textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+                )
+              )
+            )
+          ]
+        )
+      )
     );
   }
 }

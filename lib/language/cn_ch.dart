@@ -89,5 +89,7 @@ const Map<String, String> ch = {
   'total_supply': '总供应量',
   'from': '来自',
   'to': '至',
-  'confirm': '确认'
+  'confirm': '确认',
+  'notification': '通知',
+  'transaction_complete': '交易完成'
 };

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cancoin_wallet/component/common_button.dart';
 import 'package:cancoin_wallet/component/tx_components.dart';
 import 'package:cancoin_wallet/constants/strings.dart';
+import 'package:cancoin_wallet/model/notification_info.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cancoin_wallet/global.dart';
@@ -47,6 +48,19 @@ class _SignTransactionScreenState extends State<SignTransactionScreen> {
     });
 
     String receipt = await web3Controller.confirmTransaction(context.read<ParamsProvider>().signedTx!);
+    DateTime now = DateTime.now();
+    if(storageController.instance!.getBool('transactionAlert')!){
+      NotificationInfo info = NotificationInfo.fromMap({
+        'title': 'transaction_complete'.tr,
+        'logo': context.read<TokenProvider>().tokens[this.selToken].logo,
+        'time': now.year.toString() + '-' + (now.month + 1).toString() + '-' + now.day.toString() + ' ' + now.hour.toString() + ':' + now.minute.toString(),
+        'value': receipt
+      });
+      int id = await sqliteController.insertNotification(info);
+      info.id = id;
+      context.read<TokenProvider>().addAlert(info);
+    }
+
     setState(() {
       this.isLoading = false;
     });
@@ -93,7 +107,7 @@ class _SignTransactionScreenState extends State<SignTransactionScreen> {
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 GestureDetector(
                   onTap: (){
@@ -102,7 +116,7 @@ class _SignTransactionScreenState extends State<SignTransactionScreen> {
                   child: Icon(LineIcons.arrowLeft, color: color.textColor, size: 30),
                 ),
                 SizedBox(width: 15),
-                Text('confirm'.tr, style: TextStyle(color: color.foreColor, fontFamily: Strings.fMedium, fontSize: 18)
+                Text('confirm'.tr, style: TextStyle(color: color.foreColor, fontFamily: Strings.fSemiBold, fontSize: 20)
                 )
               ],
             ),
@@ -180,8 +194,6 @@ class _SignTransactionScreenState extends State<SignTransactionScreen> {
       ),
     );
   }
-
-
   @override
   void dispose() {
     recipientController.dispose();
